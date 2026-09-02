@@ -1,0 +1,13 @@
+node_modules/
+.turbo/
+dist/
+.next/
+out/
+*.tsbuildinfo
+.env
+.env.local
+.DS_Store
+public/r/
+.playwright-mcp/
+*.png
+.claude/settings.local.json

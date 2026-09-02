@@ -1,0 +1,21 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import "tailwindcss";
+@import "@uds/tokens/theme.css";
+
+/* Enable `dark:` utilities driven by a `.dark` class on an ancestor. */
+@custom-variant dark (&:is(.dark *));
+
+/* Detect utility classes used inside the @uds/ui source (outside this app). */
+@source "../../../packages/ui/src";
+
+@layer base {
+  * {
+    border-color: var(--color-border-base-low);
+  }
+  body {
+    background-color: var(--color-frame-base-low);
+    color: var(--color-text-base-primary);
+    font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+    -webkit-font-smoothing: antialiased;
+  }
+}

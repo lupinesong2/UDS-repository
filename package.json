@@ -1,0 +1,22 @@
+{
+  "name": "uds",
+  "version": "0.0.0",
+  "private": true,
+  "description": "UDS — Unified Design System. Figma design assets codified as a distributable component registry.",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "tokens": "turbo run build --filter=@uds/tokens",
+    "registry:build": "turbo run registry:build --filter=@uds/docs"
+  },
+  "devDependencies": {
+    "turbo": "latest",
+    "typescript": "latest"
+  }
+}

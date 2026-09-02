@@ -1,0 +1,19 @@
+{
+  "name": "@uds/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./theme.css": "./dist/theme.css"
+  },
+  "scripts": {
+    "build": "node scripts/build-css.ts",
+    "dev": "node --watch scripts/build-css.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest"
+  }
+}

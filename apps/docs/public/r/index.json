@@ -1,0 +1,43 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "uds",
+  "homepage": "https://uds.example.com",
+  "items": [
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "동작을 트리거하는 클릭 가능한 요소. category(page 55px·module 44px·inline 33px) × variant(filled·outline·ghost) × hierarchy(primary·secondary·tertiary), iconStart/iconEnd, asChild 지원.",
+      "dependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button Group",
+      "description": "화면 하단·Bottom Sheet·Dialog·Card에서 주요 CTA를 함께 배치하는 버튼 그룹. Figma [Button Group] CTA·Bottom Sheet·Dialog·Card 네 세트에 1:1로 대응한다. direction(row=동일 너비 나란히 · column=풀너비 세로)만 소유하고, 버튼 크기·색상은 Button이 담당해(CTA/Bottom Sheet=page 55px, Dialog·Card=module 44px) filled·filled+filled·filled+outline·filled+ghost 패턴을 children으로 표현한다.",
+      "dependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "cta",
+      "type": "registry:ui",
+      "title": "CTA",
+      "description": "화면 하단에 주요 행동을 고정 배치하는 액션 영역. Figma [CTA] 세트에 대응한다. onFrameHigh(false=base/low·true=base/high)로 배경을 프레임에 맞추고, 액션은 children으로 ButtonGroup을 넣으며, hasSystemUiBottom(기본 true)이면 하단 시스템 UI(iOS 홈 인디케이터)를 렌더한다. systemUi 슬롯으로 시스템 UI를 교체할 수 있다.",
+      "dependencies": [
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ]
+    }
+  ]
+}
