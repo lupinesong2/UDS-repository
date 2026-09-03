@@ -1,9 +1,5 @@
 {
   "codeConnect": {
-    "parser": "react",
-    "include": ["packages/ui/src/components/**/*.tsx"],
-    "importPaths": {
-      "packages/ui/src/components/*": "@uds/ui"
-    }
+    "include": ["packages/ui/src/components/**/*.figma.ts"]
   }
 }
