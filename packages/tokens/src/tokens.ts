@@ -44,6 +44,7 @@ export const color = {
   "text-base-primary": "#1a1a1a",
   "text-base-secondary": "#474747",
   "text-base-tertiary": "#696969",
+  "text-base-quaternary": "#747474",
   "text-base-white": "#ffffff",
   "text-base-black": "#1a1a1a",
   "text-base-inverse-white": "#ffffff",

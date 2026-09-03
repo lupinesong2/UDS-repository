@@ -49,6 +49,17 @@
         "clsx",
         "tailwind-merge"
       ]
+    },
+    {
+      "name": "text-field",
+      "type": "registry:ui",
+      "title": "Text Field",
+      "description": "이름·주소·검색어 등 자유로운 문자열을 입력하는 기본 텍스트 입력 필드. Figma [Text Field] Text 세트에 대응한다. label/required(별표) · placeholder · error(빨간 링+빨간 메시지) · disabled(네이티브) 상태와, 하단 supporting messages(도움말 최대 3개), 끝 슬롯(iconEnd), 지우기 버튼(onClear)을 지원한다. 포커스(isTyping)는 :focus-within로 처리된다.",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ]
     }
   ]
 }
