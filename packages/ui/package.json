@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "latest",
+    "@uds/icons": "workspace:*",
     "class-variance-authority": "latest",
     "clsx": "latest",
     "tailwind-merge": "latest"

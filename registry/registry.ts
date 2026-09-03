@@ -10,11 +10,13 @@
  */
 
 export type RegistryFile = {
-  /** Path within `packages/ui/src`. */
+  /** Path within the source package (`packages/<pkg>/src`). */
   src: string;
   /** Install target in the consuming project. */
   target: string;
   type: "registry:ui" | "registry:lib";
+  /** Which workspace package `src` is resolved from. Defaults to `ui`. */
+  pkg?: "ui" | "icons";
 };
 
 export type RegistryItem = {
@@ -142,6 +144,7 @@ export const registry: RegistryItem[] = [
     files: [
       { src: "components/checkbox.tsx", target: "components/ui/checkbox.tsx", type: "registry:ui" },
       { src: "lib/utils.ts", target: "lib/utils.ts", type: "registry:lib" },
+      { src: "index.tsx", target: "components/ui/icons.tsx", type: "registry:lib", pkg: "icons" },
     ],
     meta: {
       ai: [
@@ -162,6 +165,7 @@ export const registry: RegistryItem[] = [
     files: [
       { src: "components/text-field.tsx", target: "components/ui/text-field.tsx", type: "registry:ui" },
       { src: "lib/utils.ts", target: "lib/utils.ts", type: "registry:lib" },
+      { src: "index.tsx", target: "components/ui/icons.tsx", type: "registry:lib", pkg: "icons" },
     ],
     meta: {
       ai: [
@@ -169,6 +173,28 @@ export const registry: RegistryItem[] = [
         "[상태] isTyping(포커스)은 프롭이 아니라 :focus-within로 처리된다(검은 1px 링). isDisabled는 네이티브 disabled, isError는 error 프롭으로 지정한다. error와 disabled는 독립적이며 둘 다 true면 error(빨강)가 우선한다.",
         "[콘텐츠] required는 마젠타 별표를 표시하고 네이티브 required도 설정한다. placeholder는 네이티브 속성이다. 끝 슬롯 아이콘(예: mic)은 iconEnd, 입력값 지우기 버튼은 onClear로 전달한다(onClear가 있으면 close-circle 버튼이 렌더된다).",
         "[색상·토큰] 필드 배경=container/base/high, 입력 텍스트=text/base/primary, placeholder=text/base/quaternary, 캐럿=container/brand/primary, 포커스 링=status/border/selected, 에러 링=status/border/negative, 메시지=text/base/tertiary(기본)·status/text/disabled(비활성)·status/text/negative(에러). 모두 토큰 바인딩, 하드코딩 금지.",
+      ],
+    },
+  },
+  {
+    name: "header",
+    type: "registry:ui",
+    title: "Header",
+    description:
+      "화면 상단 내비게이션 바. Figma [Header]·[Header] Search·[Header] Logo 세 세트를 category 축으로 병합한다. category(title·search·logo) × align(left·center, search 제외) × onFrameHigh(배경 base/low·base/high)를 가지며, onBack(뒤로 chevron)·actions(우측 아이콘)·title/logo/검색 입력을 슬롯으로 받는다. 레이아웃 컨테이너라 색상은 배경만 소유하고, align은 title·logo에만 존재(search엔 없음, 타입으로 강제).",
+    dependencies: ["class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      { src: "components/header.tsx", target: "components/ui/header.tsx", type: "registry:ui" },
+      { src: "lib/utils.ts", target: "lib/utils.ts", type: "registry:lib" },
+      { src: "index.tsx", target: "components/ui/icons.tsx", type: "registry:lib", pkg: "icons" },
+    ],
+    meta: {
+      ai: [
+        "[구조] Header는 화면 상단 내비게이션 컨테이너(높이 56px)다 — 색상은 배경만 소유하고, 실제 내용은 슬롯으로 받는다: onBack(뒤로 chevron), actions(우측 24px 아이콘들), title/logo, 그리고 검색 입력.",
+        "[맥락] category로 유형을 고른다: title(뒤로+제목+액션), search(뒤로+검색필드+액션), logo(로고+액션). 기본값은 title.",
+        "[맥락] align(left·center)은 title·logo에만 있다 — search에는 align이 없다(타입으로 강제, align?: never). left=제목/로고가 앞에서 채우고, center=제목/로고를 절대 중앙 배치하고 뒤로/액션을 양끝에 둔다.",
+        "[콘텐츠] 뒤로가기는 onBack 콜백으로 넘기면 chevron이 렌더된다. 우측 액션 아이콘은 actions로, 검색은 placeholder·value·onChange·onSearch로 다룬다(Enter 또는 검색 아이콘 클릭 시 onSearch).",
+        "[색상·토큰] 배경=onFrameHigh로 background/base/low(#fcfcfc)·high(#f2f2f2). 제목=title/small·text/base/primary, 아이콘=icon/base/primary, 검색 필드 배경=container/base/high(프레임 low일 때)·container/base/low-level1(프레임 high일 때, 헤더와 반대로 대비), placeholder=text/base/quaternary. 모두 토큰 바인딩, 하드코딩 금지.",
       ],
     },
   },

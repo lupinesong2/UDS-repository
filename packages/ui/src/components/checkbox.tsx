@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cva } from "class-variance-authority";
+import { CheckIcon } from "@uds/icons";
 import { cn } from "../lib/utils.ts";
 
 /**
@@ -55,23 +56,6 @@ const boxVariants = cva(
     defaultVariants: { size: "medium" },
   }
 );
-
-function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={3}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      {...props}
-    >
-      <path d="M5 13l4 4L19 7" />
-    </svg>
-  );
-}
 
 type CheckboxVariantProps = {
   /** Box + label scale. `medium` = 24px/label-large, `small` = 20px/label-medium. Defaults to `medium`. */

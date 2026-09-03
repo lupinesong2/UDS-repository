@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cva } from "class-variance-authority";
+import { CloseCircleIcon, ErrorCircleIcon } from "@uds/icons";
 import { cn } from "../lib/utils.ts";
 
 /**
@@ -38,24 +39,6 @@ const textFieldVariants = cva(
     defaultVariants: { error: false },
   }
 );
-
-/** close-circle-fill (clear). Solid circle with an X punched out → single-color, any background. */
-function ClearIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z" />
-    </svg>
-  );
-}
-
-/** error-circle-fill (supporting). Solid circle with an "!" punched out — inherits `currentColor`. */
-function InfoCircleIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-    </svg>
-  );
-}
 
 type TextFieldOwnProps = {
   /** Label above the field (Figma `[Field Text Set] Label`). Omit to hide the label row. */
@@ -116,7 +99,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 aria-label="지우기"
                 className="flex shrink-0 text-icon-base-secondary"
               >
-                <ClearIcon className="size-6" />
+                <CloseCircleIcon className="size-6" />
               </button>
             )}
             {iconEnd && <span className="flex shrink-0 [&_svg]:size-6">{iconEnd}</span>}
@@ -131,7 +114,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 className={cn("flex items-start gap-gap-4 text-body-small font-base leading-normal", messageColor)}
               >
                 <span className="flex shrink-0 items-start pt-[2px]">
-                  <InfoCircleIcon className="size-4" />
+                  <ErrorCircleIcon className="size-4" />
                 </span>
                 <span className="min-w-0 flex-1">{m}</span>
               </div>

@@ -14,18 +14,22 @@ import { registry, type RegistryItem } from "../../../registry/registry.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const uiSrc = join(here, "..", "..", "..", "packages", "ui", "src");
+const iconsSrc = join(here, "..", "..", "..", "packages", "icons", "src");
 const outDir = join(here, "..", "public", "r");
 
-/** Rewrite monorepo-relative imports to the shadcn `@/` alias. */
+const srcBase = { ui: uiSrc, icons: iconsSrc } as const;
+
+/** Rewrite monorepo-relative + workspace imports to the shadcn `@/` alias. */
 function normalizeImports(code: string): string {
   return code
     .replace(/(["'])\.{1,2}\/lib\/utils(\.ts)?\1/g, '"@/lib/utils"')
+    .replace(/(["'])@uds\/icons\1/g, '"@/components/ui/icons"')
     .replace(/(["'])\.\/([a-z-]+)\.tsx?\1/g, '"@/components/ui/$2"');
 }
 
 function buildItem(item: RegistryItem) {
   const files = item.files.map((f) => {
-    const raw = readFileSync(join(uiSrc, f.src), "utf8");
+    const raw = readFileSync(join(srcBase[f.pkg ?? "ui"], f.src), "utf8");
     return {
       path: f.target,
       target: f.target,

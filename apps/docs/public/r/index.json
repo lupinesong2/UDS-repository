@@ -60,6 +60,17 @@
         "clsx",
         "tailwind-merge"
       ]
+    },
+    {
+      "name": "header",
+      "type": "registry:ui",
+      "title": "Header",
+      "description": "화면 상단 내비게이션 바. Figma [Header]·[Header] Search·[Header] Logo 세 세트를 category 축으로 병합한다. category(title·search·logo) × align(left·center, search 제외) × onFrameHigh(배경 base/low·base/high)를 가지며, onBack(뒤로 chevron)·actions(우측 아이콘)·title/logo/검색 입력을 슬롯으로 받는다. 레이아웃 컨테이너라 색상은 배경만 소유하고, align은 title·logo에만 존재(search엔 없음, 타입으로 강제).",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ]
     }
   ]
 }
