@@ -18,7 +18,7 @@
     "figma:publish": "figma connect publish"
   },
   "devDependencies": {
-    "@figma/code-connect": "latest",
+    "@figma/code-connect": "^1.5.3",
     "turbo": "latest",
     "typescript": "latest"
   }

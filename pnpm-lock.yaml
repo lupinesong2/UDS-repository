@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@figma/code-connect':
-        specifier: latest
-        version: 2.0.0(supports-color@7.2.0)
+        specifier: ^1.5.3
+        version: 1.5.3(supports-color@7.2.0)
       turbo:
         specifier: latest
         version: 2.10.12
@@ -163,8 +163,8 @@ packages:
   '@emnapi/runtime@1.11.3':
     resolution: {integrity: sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA==}
 
-  '@figma/code-connect@2.0.0':
-    resolution: {integrity: sha512-FNpemwBciNCpskBZ8TK0iRa+oZR5H6+NP8XVDawww8Vz1bFoIrPu0y3NvPR0xnjtrOhAu+3DXqZmSR4cb0V+2w==}
+  '@figma/code-connect@1.5.3':
+    resolution: {integrity: sha512-rQ3cBKVK0z5n8oNW0ypojcLm0rrmTm1y8W0IUHQdlhyf/STnz7eCsIdCRZ6k5iXRW4D6PF0IHPKK7V+6bTa7RQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1794,7 +1794,7 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@figma/code-connect@2.0.0(supports-color@7.2.0)':
+  '@figma/code-connect@1.5.3(supports-color@7.2.0)':
     dependencies:
       boxen: 5.1.1
       chalk: 4.1.2
