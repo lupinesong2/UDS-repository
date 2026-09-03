@@ -13,9 +13,12 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "tokens": "turbo run build --filter=@uds/tokens",
-    "registry:build": "turbo run registry:build --filter=@uds/docs"
+    "registry:build": "turbo run registry:build --filter=@uds/docs",
+    "figma:check": "figma connect publish --dry-run",
+    "figma:publish": "figma connect publish"
   },
   "devDependencies": {
+    "@figma/code-connect": "latest",
     "turbo": "latest",
     "typescript": "latest"
   }

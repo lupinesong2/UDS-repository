@@ -4,5 +4,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "comment": "*.figma.tsx are @figma/code-connect sources (published via the figma CLI, not app code) — excluded so tsc doesn't require the CLI's types.",
+  "exclude": ["**/*.figma.tsx"]
 }
