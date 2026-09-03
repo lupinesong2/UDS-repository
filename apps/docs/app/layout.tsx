@@ -13,10 +13,15 @@ const NAV = [
   { href: "/components/cta", label: "CTA" },
   { href: "/components/checkbox", label: "Checkbox" },
   { href: "/components/text-field", label: "Text Field" },
-  { href: "/code-connect", label: "Code Connect" },
+  { href: "/components/header", label: "Header" },
 ];
 
-const EXAMPLES = [{ href: "/examples/roaming", label: "해외로밍 사용요금조회" }];
+const EXAMPLES = [
+  { href: "/examples/roaming", label: "해외로밍 사용요금조회" },
+  { href: "/examples/address", label: "배송지 입력" },
+];
+
+const RESOURCES = [{ href: "/code-connect", label: "Code Connect" }];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -38,6 +43,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               >
                 Design Tokens
               </Link>
+              <Link
+                href="/foundations/icons"
+                className="rounded-medium px-2 py-1.5 text-sm text-text-base-secondary hover:bg-container-base-high hover:text-text-base-primary"
+              >
+                Icons
+              </Link>
               <span className="mt-4 px-2 text-xs font-medium uppercase tracking-wider text-text-base-tertiary">
                 Components
               </span>
@@ -54,6 +65,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Examples
               </span>
               {EXAMPLES.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-medium px-2 py-1.5 text-sm text-text-base-secondary hover:bg-container-base-high hover:text-text-base-primary"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <span className="mt-4 px-2 text-xs font-medium uppercase tracking-wider text-text-base-tertiary">
+                Resources
+              </span>
+              {RESOURCES.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}

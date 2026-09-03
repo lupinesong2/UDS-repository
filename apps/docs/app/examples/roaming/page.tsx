@@ -37,12 +37,9 @@ export default function RoamingExamplePage() {
           Figma 화면(<code>node 20601:58919</code>)을 그대로 구현한 402px 모바일 화면입니다. 지금까지
           만든 <code>@uds/ui</code> 컴포넌트(<code>TextField</code> · <code>Checkbox</code> ·{" "}
           <code>Cta</code> · <code>ButtonGroup</code> · <code>Button</code>)로 조립하고, 아직
-          컴포넌트가 없는 부분은 커스텀 마크업으로 채웠습니다. 화면 위{" "}
-          <strong className="text-text-base-primary">오버레이</strong>는 두 모드로 볼 수 있어요 —
-          기본값 <strong className="text-text-base-primary">모듈 그룹핑</strong>은 오토레이아웃 섹션·
-          모듈·하위 그룹의 중첩 구조를 깊이별 색(인디고 실선/바이올렛 점선)으로 보여주고,{" "}
-          <strong className="text-text-base-primary">컴포넌트</strong> 모드는 우리 컴포넌트(초록)와
-          커스텀(주황)을 구분합니다.
+          컴포넌트가 없는 부분은 커스텀 마크업으로 채웠습니다. 어느 영역이 우리 컴포넌트이고 어느
+          부분이 커스텀인지는 아래 <strong className="text-text-base-primary">구성 분해</strong>{" "}
+          표에서 확인할 수 있어요.
         </p>
       </header>
 

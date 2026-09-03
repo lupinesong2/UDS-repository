@@ -105,26 +105,18 @@ const OPTIONS = [
   { key: "temp", label: "임시 로밍" },
 ] as const;
 
-function LegendDot({ color, dashed, text }: { color: string; dashed?: boolean; text: string }) {
-  return (
-    <span className="inline-flex items-center gap-2 text-xs text-text-base-tertiary">
-      <span className="inline-block h-3 w-4 rounded-sm" style={{ outline: `2px ${dashed ? "dashed" : "solid"} ${color}` }} />
-      {text}
-    </span>
-  );
-}
-
 export function RoamingScreen() {
-  const [mode, setMode] = useState<Mode>("group");
+  // 오버레이 컨트롤 제거 — Region은 순수 패스스루(mode="off").
+  const mode = "off" as const;
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const anyChecked = Object.values(checked).some(Boolean);
 
   return (
-    <div className="flex flex-col items-start gap-6 lg:flex-row">
-      {/* 402px 모바일 프레임 — 컨트롤과 분리되어 조작해도 움직이지 않음.
-          overflow는 visible: 오버레이 배지/아웃라인이 가장자리에서 잘리지 않도록.
-          둥근 디바이스 모양은 최상단/최하단 자식 모서리를 맞춰 유지한다. */}
-      <div className="flex h-[874px] w-[402px] shrink-0 flex-col rounded-[40px] border bg-frame-base-low shadow-2xl">
+    // 산출물 0.7배 축소 + 영역 가운데. 바깥 박스가 축소된 실제 크기를 차지한다.
+    <div style={{ width: 402 * 0.7, height: 874 * 0.7 }}>
+      <div className="origin-top-left scale-[0.7]">
+        {/* 402px 모바일 프레임 */}
+        <div className="flex h-[874px] w-[402px] flex-col rounded-[40px] border bg-frame-base-low shadow-2xl">
         {/* OS 상단 바 */}
         <Region mode={mode} group={{ name: "OS Bar", depth: 0 }} comp={{ name: "OS Bar Top", kind: "custom" }}>
           <div className="flex items-center justify-between rounded-t-[40px] bg-background-base-low pb-component-y-8 pt-[10px]">
@@ -225,50 +217,8 @@ export function RoamingScreen() {
             </ButtonGroup>
           </Cta>
         </Region>
+        </div>
       </div>
-
-      {/* 컨트롤 패널 — 화면과 분리. 여기를 조작해도 프레임은 고정. */}
-      <aside className="w-full rounded-large border bg-frame-base-low p-4 lg:sticky lg:top-6 lg:w-64">
-        <span className="text-xs font-medium uppercase tracking-wider text-text-base-tertiary">
-          오버레이
-        </span>
-        <div className="mt-3 flex w-full rounded-medium border p-0.5">
-          {(["group", "component", "off"] as const).map((m) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
-              className={cn(
-                "flex-1 rounded px-2 py-1.5 text-sm transition-colors",
-                mode === m
-                  ? "bg-container-base-high font-medium text-text-base-primary"
-                  : "text-text-base-tertiary hover:text-text-base-primary"
-              )}
-            >
-              {m === "group" ? "그룹핑" : m === "component" ? "컴포넌트" : "끄기"}
-            </button>
-          ))}
-        </div>
-        {/* min-height로 모드 전환 시 패널 높이도 흔들리지 않게 고정 */}
-        <div className="mt-4 flex min-h-[72px] flex-col gap-2">
-          {mode === "group" && (
-            <>
-              <LegendDot color={GROUP_0} text="섹션 · 모듈 (최상위 그룹)" />
-              <LegendDot color={GROUP_1} dashed text="하위 그룹 (Contents · Checkbox Group)" />
-            </>
-          )}
-          {mode === "component" && (
-            <>
-              <LegendDot color={UDS} text="우리 컴포넌트 (@uds/ui)" />
-              <LegendDot color={CUSTOM} dashed text="커스텀 (아직 컴포넌트 없음)" />
-            </>
-          )}
-          {mode === "off" && (
-            <span className="text-xs text-text-base-tertiary">
-              오버레이가 꺼져 순수 화면만 표시됩니다.
-            </span>
-          )}
-        </div>
-      </aside>
     </div>
   );
 }
