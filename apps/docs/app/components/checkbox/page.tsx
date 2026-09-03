@@ -14,7 +14,7 @@ const TOKENS = [
   ["라벨 타이포 · medium", "font/label/large", "16"],
   ["라벨 타이포 · small", "font/label/medium", "14"],
   ["라벨 굵기 · strong / base", "fontWeight-strong / base", "700 / 500"],
-  ["박스↔라벨 간격", "spacing/gap/4", "4px"],
+  ["박스↔라벨 간격", "spacing/gap/6", "6px"],
   ["상하 여백 · medium / small", "spacing/component/y/8 · y/10", "8px / 10px"],
   ["박스 모서리", "radius/small", "4px"],
 ] as const;

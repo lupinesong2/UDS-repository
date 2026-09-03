@@ -17,7 +17,7 @@ import { cn } from "../lib/utils.ts";
  * Every color is bound to a Figma design token.
  */
 const checkboxVariants = cva(
-  ["relative inline-flex cursor-pointer select-none items-center gap-gap-4 font-sans leading-none", "has-[:disabled]:cursor-not-allowed"],
+  ["relative inline-flex cursor-pointer select-none items-center gap-gap-6 font-sans leading-none", "has-[:disabled]:cursor-not-allowed"],
   {
     variants: {
       size: {
