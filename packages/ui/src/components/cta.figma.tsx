@@ -10,8 +10,9 @@ const FILE = "https://www.figma.com/design/spWdVkr7RbwWOyDG6xbY4z";
 
 figma.connect(Cta, `${FILE}?node-id=14942-51398`, {
   props: {
-    onFrameHigh: figma.boolean("onFrameHigh"),
-    hasSystemUiBottom: figma.boolean("hasSystemUi-bottom"),
+    // exact Figma property names (note the ◒ / <-> glyph prefixes)
+    onFrameHigh: figma.enum("onFrameHigh", { true: true, false: false }),
+    hasSystemUiBottom: figma.boolean("◒ hasSystemUi-bottom"),
   },
   example: ({ onFrameHigh, hasSystemUiBottom }) => (
     <Cta onFrameHigh={onFrameHigh} hasSystemUiBottom={hasSystemUiBottom}>

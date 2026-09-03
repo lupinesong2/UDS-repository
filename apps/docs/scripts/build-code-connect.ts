@@ -31,6 +31,7 @@ const CTA = "packages/ui/src/components/cta.tsx";
 const MANIFEST = [
   { component: "Button", source: BUTTON, figmaSet: "[Button] Page", nodeId: "654:107975" },
   { component: "Button", source: BUTTON, figmaSet: "[Button] Module", nodeId: "654:108042" },
+  { component: "Button", source: BUTTON, figmaSet: "[Button] Inline", nodeId: "654:108197" },
   { component: "ButtonGroup", source: GROUP, figmaSet: "[Button Group] CTA", nodeId: "17892:404602" },
   { component: "ButtonGroup", source: GROUP, figmaSet: "[Button Group] Bottom Sheet", nodeId: "654:108885" },
   { component: "ButtonGroup", source: GROUP, figmaSet: "[Button Group] Dialog", nodeId: "654:108897" },

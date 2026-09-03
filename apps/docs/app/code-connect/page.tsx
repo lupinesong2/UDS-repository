@@ -51,7 +51,9 @@ export default function CodeConnectPage() {
         </p>
         <p className="mt-3 text-sm text-text-base-tertiary">
           연결됨 <span className="font-semibold text-text-base-primary">{connected}</span> / {total}{" "}
-          · 마지막 동기화 <code>{GENERATED_AT.slice(0, 10)}</code>
+          · 마지막 동기화 <code>{GENERATED_AT.slice(0, 10)}</code> · GitHub 연동{" "}
+          <span className="font-medium text-text-brand-primary-high">연결됨</span> (Figma for GitHub →{" "}
+          <code>lupinesong2/UDS-repository</code>)
         </p>
       </header>
 

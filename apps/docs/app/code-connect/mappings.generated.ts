@@ -12,7 +12,7 @@ export type CcMapping = {
   status: CcStatus;
 };
 
-export const GENERATED_AT = "2026-09-03T00:30:25.147Z";
+export const GENERATED_AT = "2026-09-03T01:22:15.613Z";
 
 export const MAPPINGS: CcMapping[] = [
   {
@@ -27,6 +27,13 @@ export const MAPPINGS: CcMapping[] = [
     "source": "packages/ui/src/components/button.tsx",
     "figmaSet": "[Button] Module",
     "nodeId": "654:108042",
+    "status": "connected"
+  },
+  {
+    "component": "Button",
+    "source": "packages/ui/src/components/button.tsx",
+    "figmaSet": "[Button] Inline",
+    "nodeId": "654:108197",
     "status": "connected"
   },
   {
