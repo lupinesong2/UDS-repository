@@ -12,8 +12,11 @@ const NAV = [
   { href: "/components/button-group", label: "Button Group" },
   { href: "/components/cta", label: "CTA" },
   { href: "/components/checkbox", label: "Checkbox" },
+  { href: "/components/text-field", label: "Text Field" },
   { href: "/code-connect", label: "Code Connect" },
 ];
+
+const EXAMPLES = [{ href: "/examples/roaming", label: "해외로밍 사용요금조회" }];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -39,6 +42,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Components
               </span>
               {NAV.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-medium px-2 py-1.5 text-sm text-text-base-secondary hover:bg-container-base-high hover:text-text-base-primary"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <span className="mt-4 px-2 text-xs font-medium uppercase tracking-wider text-text-base-tertiary">
+                Examples
+              </span>
+              {EXAMPLES.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
