@@ -11,6 +11,7 @@ const NAV = [
   { href: "/components/button", label: "Button" },
   { href: "/components/button-group", label: "Button Group" },
   { href: "/components/cta", label: "CTA" },
+  { href: "/components/checkbox", label: "Checkbox" },
   { href: "/code-connect", label: "Code Connect" },
 ];
 

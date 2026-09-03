@@ -81,7 +81,9 @@ export const color = {
   "frame-base-high": "#f2f2f2",
   // icon
   "icon-base-primary": "#1a1a1a",
+  "icon-base-secondary": "#747474",
   "icon-base-tertiary": "#969696",
+  "icon-base-inverse-white": "#ffffff",
   // status
   "status-text-positive": "#018303",
   "status-text-negative": "#da0707",
@@ -91,6 +93,8 @@ export const color = {
   "status-border-selected": "#1a1a1a",
   "status-border-disabled": "#1a1a1a29",
   "status-icon-warning": "#f8cc1b",
+  "status-icon-selected": "#1a1a1a",
+  "status-icon-disabled-inverse-black": "#1a1a1a29",
   "status-container-selected": "#1a1a1a",
   "status-container-disabled": "#ebebeb",
   "status-white": "#ffffff",

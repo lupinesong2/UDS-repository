@@ -38,6 +38,17 @@
         "clsx",
         "tailwind-merge"
       ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "하나 이상 선택할 수 있는 선택 컨트롤. Figma [Checkbox] 세트에 대응한다. size(medium 24px·small 20px) × fontWeight(strong·base)의 스타일 축과, 네이티브 checked/disabled로 표현되는 상태를 가진다. 라벨을 감싸는 접근성 있는 네이티브 input + 토큰 스타일 박스로 구현된다.",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ]
     }
   ]
 }

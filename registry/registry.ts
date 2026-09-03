@@ -132,4 +132,24 @@ export const registry: RegistryItem[] = [
       ],
     },
   },
+  {
+    name: "checkbox",
+    type: "registry:ui",
+    title: "Checkbox",
+    description:
+      "하나 이상 선택할 수 있는 선택 컨트롤. Figma [Checkbox] 세트에 대응한다. size(medium 24px·small 20px) × fontWeight(strong·base)의 스타일 축과, 네이티브 checked/disabled로 표현되는 상태를 가진다. 라벨을 감싸는 접근성 있는 네이티브 input + 토큰 스타일 박스로 구현된다.",
+    dependencies: ["class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      { src: "components/checkbox.tsx", target: "components/ui/checkbox.tsx", type: "registry:ui" },
+      { src: "lib/utils.ts", target: "lib/utils.ts", type: "registry:lib" },
+    ],
+    meta: {
+      ai: [
+        "[구조] Checkbox는 <label>이 네이티브 <input type=checkbox>(스크린리더용, peer) + 토큰 박스 + 라벨을 감싼다. 라벨 텍스트는 children으로 전달한다.",
+        "[크기·타이포] size로 박스와 라벨을 함께 키운다: medium=박스 24px·label-large(16), small=박스 20px·label-medium(14). fontWeight=strong(bold 700)/base(medium 500)는 라벨 굵기다. 두 축은 독립적이며 4×2×2×2 전 조합이 유효하다.",
+        "[상태] isChecked/isDisabled는 프롭이 아니라 네이티브 checked/defaultChecked/disabled로 지정한다 — 박스는 peer-checked/peer-disabled로 반응한다.",
+        "[색상·토큰] 미선택 테두리=icon/base/secondary, 선택 채움=status/icon/selected, 비활성=status/icon/disabled-inverseBlack, 체크마크=icon/base/inverseWhite, 라벨=text/base/primary(비활성 status/text/disabled). 모두 토큰 바인딩, 하드코딩 금지.",
+      ],
+    },
+  },
 ];
