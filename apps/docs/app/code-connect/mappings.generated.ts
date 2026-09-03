@@ -12,7 +12,7 @@ export type CcMapping = {
   status: CcStatus;
 };
 
-export const GENERATED_AT = "2026-09-03T00:24:51.839Z";
+export const GENERATED_AT = "2026-09-03T00:30:25.147Z";
 
 export const MAPPINGS: CcMapping[] = [
   {
@@ -27,7 +27,7 @@ export const MAPPINGS: CcMapping[] = [
     "source": "packages/ui/src/components/button.tsx",
     "figmaSet": "[Button] Module",
     "nodeId": "654:108042",
-    "status": "pending"
+    "status": "connected"
   },
   {
     "component": "ButtonGroup",
@@ -41,21 +41,21 @@ export const MAPPINGS: CcMapping[] = [
     "source": "packages/ui/src/components/button-group.tsx",
     "figmaSet": "[Button Group] Bottom Sheet",
     "nodeId": "654:108885",
-    "status": "pending"
+    "status": "connected"
   },
   {
     "component": "ButtonGroup",
     "source": "packages/ui/src/components/button-group.tsx",
     "figmaSet": "[Button Group] Dialog",
     "nodeId": "654:108897",
-    "status": "pending"
+    "status": "connected"
   },
   {
     "component": "ButtonGroup",
     "source": "packages/ui/src/components/button-group.tsx",
     "figmaSet": "[Button Group] Card",
     "nodeId": "654:108906",
-    "status": "pending"
+    "status": "connected"
   },
   {
     "component": "Cta",
