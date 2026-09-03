@@ -26,6 +26,7 @@ const outPath = join(here, "..", "app", "code-connect", "mappings.generated.ts")
 const BUTTON = "packages/ui/src/components/button.tsx";
 const GROUP = "packages/ui/src/components/button-group.tsx";
 const CTA = "packages/ui/src/components/cta.tsx";
+const CHECKBOX = "packages/ui/src/components/checkbox.tsx";
 
 /** The mappings we intend to exist — the "what should be connected" list. */
 const MANIFEST = [
@@ -37,6 +38,7 @@ const MANIFEST = [
   { component: "ButtonGroup", source: GROUP, figmaSet: "[Button Group] Dialog", nodeId: "654:108897" },
   { component: "ButtonGroup", source: GROUP, figmaSet: "[Button Group] Card", nodeId: "654:108906" },
   { component: "Cta", source: CTA, figmaSet: "[CTA]", nodeId: "14942:51398" },
+  { component: "Checkbox", source: CHECKBOX, figmaSet: "[Checkbox]", nodeId: "654:107836" },
 ];
 
 type MapEntry = { componentName: string; source: string };

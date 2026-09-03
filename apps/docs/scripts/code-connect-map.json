@@ -30,6 +30,9 @@
       { "componentName": "Cta", "source": "packages/ui/src/components/cta.tsx" },
       { "componentName": "ButtonGroup", "source": "packages/ui/src/components/button-group.tsx" },
       { "componentName": "Button", "source": "packages/ui/src/components/button.tsx" }
+    ],
+    "654:107836": [
+      { "componentName": "Checkbox", "source": "packages/ui/src/components/checkbox.tsx" }
     ]
   }
 }

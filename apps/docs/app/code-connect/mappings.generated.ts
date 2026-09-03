@@ -12,7 +12,7 @@ export type CcMapping = {
   status: CcStatus;
 };
 
-export const GENERATED_AT = "2026-09-03T01:22:15.613Z";
+export const GENERATED_AT = "2026-09-03T04:00:22.778Z";
 
 export const MAPPINGS: CcMapping[] = [
   {
@@ -69,6 +69,13 @@ export const MAPPINGS: CcMapping[] = [
     "source": "packages/ui/src/components/cta.tsx",
     "figmaSet": "[CTA]",
     "nodeId": "14942:51398",
+    "status": "connected"
+  },
+  {
+    "component": "Checkbox",
+    "source": "packages/ui/src/components/checkbox.tsx",
+    "figmaSet": "[Checkbox]",
+    "nodeId": "654:107836",
     "status": "connected"
   }
 ];
