@@ -158,6 +158,15 @@ the docs page to cover the new set; do **not** add a no-op prop/axis. Only add a
 real axis when it changes styling the wrapper itself owns. State this mapping in
 the report.
 
+**New layout containers (not button-like):** a container component (e.g. `Cta` —
+a screen-bottom action area with an `onFrameHigh` background axis + optional
+system-UI slot + `children`) is NOT interactive, so skip the button base
+(focus ring, state-layer `before:`, `inline-flex`). Use a **minimal `cva`** for
+just the axis it owns (e.g. background), keep booleans/slots as plain props, and
+compose the real action via `children` (put a `ButtonGroup` inside). OS-spec
+geometry (e.g. iOS home-indicator 5px/134px) may stay literal, but its **color
+must still bind to a token**.
+
 ## 4. Registry (`registry/registry.ts`) + rebuild
 
 Add/merge one `RegistryItem`: `name`, `title`, `description`, `dependencies`
@@ -334,57 +343,14 @@ const bad = <X category="page" variant="outline" />;      // MUST error
 Expect `TS2322 … is not assignable` on every intentionally-invalid line, none on
 the valid ones. Remove the temp file.
 
-## 8. (Optional) Code Connect — publish v2 template mappings
+## 8. (Optional) Code Connect
 
-Links each Figma component **set** to the code component so Figma Dev Mode shows
-the real snippet + GitHub source. Use `@figma/code-connect` **v2 template files**
-(`*.figma.ts`) — NOT the deprecated framework "react parser" (`.figma.tsx`),
-which stopped receiving support 2026-08-17.
-
-**Setup (once):** root devDep `@figma/code-connect` (v2); scripts
-`"figma:check": "figma connect publish --dry-run"`, `"figma:publish": "figma connect publish"`;
-`figma.config.json` = `{ "codeConnect": { "include": ["packages/ui/src/components/**/*.figma.ts"] } }`;
-exclude `**/*.figma.ts` and `**/*.figma.tsx` from `packages/ui/tsconfig.json`
-(they import the `figma` template runtime, not app code).
-
-**One `*.figma.ts` per Figma set node.** Get exact node ids + property names from
-`list_file_components_for_code_connect` (property names include glyph prefixes —
-`◐ hasIcon-start`, `◑ hasIcon-end`, `↔ icon-start/end`, `◒ hasSystemUi-bottom`;
-`variant`/`hierarchy`/`isDisabled`/`text`/`direction`/`onFrameHigh` are plain).
-Template shape:
-
-```ts
-// packages/ui/src/components/button-page.figma.ts
-import figma from "figma";
-const label = figma.selectedInstance.getString("text");
-const variant = figma.selectedInstance.getEnum("variant", { filled: "filled", ghost: "ghost" });
-export default {
-  id: "Button",
-  imports: ["import { Button } from '@uds/ui';"],
-  example: figma.code`<Button category="page"${figma.helpers.react.renderProp("variant", variant)}>${figma.helpers.react.renderChildren(label)}</Button>`,
-  metadata: { nestable: true },
-};
-```
-
-For composition components (ButtonGroup, Cta) use `{figma.children("*")}` +
-`metadata: { nestable: true }` so children resolve to their own mappings. If you
-already authored parser `.figma.tsx`, convert with `figma connect migrate` then
-delete the `.tsx` and rename the auto-named `_1/_2` outputs descriptively.
-
-**Publish.** Token needs scopes **`file_code_connect` (Write)** + **`file_content`
-(Read)**; put it in `.env` (gitignored) as `FIGMA_ACCESS_TOKEN=...`. NEVER `source`
-the file into the shell (a bad line echoes the token) — extract the value only:
-
-```bash
-export FIGMA_ACCESS_TOKEN="$(sed -n 's/^FIGMA_ACCESS_TOKEN=[[:space:]]*//p' .env | tr -d '\r' | sed -e 's/^["'\'']//' -e 's/["'\'']$//')"
-pnpm figma:check                 # dry-run: "All Code Connect files are valid"
-pnpm figma:publish -- --force    # --force overwrites prior mappings
-```
-
-Always pipe CLI output through `sed -E 's/figd_[A-Za-z0-9_-]+/figd_***/g'` so a
-token can't leak. Node ≥ 25: corepack pnpm may crash — use `~/.local/bin/pnpm` or
-`node_modules/.bin/figma` directly. The published mappings are separate from the
-docs `/code-connect` status page (that's generated from `code-connect-map.json`).
+To link the new component's Figma set(s) to this code so Dev Mode shows the
+snippet + GitHub source, use the **`uds-code-connect`** skill — it covers the full
+v2 template workflow (`*.figma.ts`), token hygiene, publish, and the docs status
+page. In brief: author one `*.figma.ts` template per set node (import from `@uds/ui`,
+map exact Figma prop names incl. glyph prefixes, `figma.children("*")` for
+composition), then `pnpm figma:check` → `pnpm figma:publish -- --force`.
 
 ---
 
