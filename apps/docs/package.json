@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "registry:build": "node scripts/build-registry.ts"
+    "registry:build": "node scripts/build-registry.ts",
+    "code-connect:build": "node scripts/build-code-connect.ts"
   },
   "dependencies": {
     "@uds/tokens": "workspace:*",

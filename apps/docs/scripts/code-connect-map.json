@@ -1,0 +1,23 @@
+{
+  "_comment": "Fetched from Figma via MCP get_code_connect_map, keyed by queried component-set node. Normalized to distinct {componentName, source} pairs. Refresh with the MCP fetch step (see build-code-connect.ts header). Source of truth = Figma.",
+  "map": {
+    "654:107975": [
+      { "componentName": "Button", "source": "packages/ui/src/components/button.tsx" }
+    ],
+    "654:108042": [],
+    "17892:404602": [
+      { "componentName": "ButtonGroup", "source": "packages/ui/src/components/button-group.tsx" },
+      { "componentName": "Button", "source": "packages/ui/src/components/button.tsx" }
+    ],
+    "654:108885": [
+      { "componentName": "Button", "source": "packages/ui/src/components/button.tsx" }
+    ],
+    "654:108897": [],
+    "654:108906": [],
+    "14942:51398": [
+      { "componentName": "Cta", "source": "packages/ui/src/components/cta.tsx" },
+      { "componentName": "ButtonGroup", "source": "packages/ui/src/components/button-group.tsx" },
+      { "componentName": "Button", "source": "packages/ui/src/components/button.tsx" }
+    ]
+  }
+}
