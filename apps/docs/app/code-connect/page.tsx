@@ -13,7 +13,7 @@ const sourceUrl = (path: string) => `${REPO}/${path}`;
 
 function H2({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+    <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
       {children}
     </h2>
   );
@@ -43,8 +43,8 @@ export default function CodeConnectPage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Design ↔ Code</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">Code Connect</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">Code Connect</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
           코드 컴포넌트와 Figma 컴포넌트 세트의 Code Connect 매핑 현황입니다. Figma Dev Mode에서 각
           컴포넌트를 선택하면 아래 소스 코드가 스니펫으로 표시됩니다. 라이브러리{" "}
           <code>{FILE_KEY}</code> 기준.

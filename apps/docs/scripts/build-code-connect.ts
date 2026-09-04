@@ -28,6 +28,7 @@ const GROUP = "packages/ui/src/components/button-group.tsx";
 const CTA = "packages/ui/src/components/cta.tsx";
 const CHECKBOX = "packages/ui/src/components/checkbox.tsx";
 const TEXTFIELD = "packages/ui/src/components/text-field.tsx";
+const HEADER = "packages/ui/src/components/header.tsx";
 
 /** The mappings we intend to exist — the "what should be connected" list. */
 const MANIFEST = [
@@ -41,6 +42,14 @@ const MANIFEST = [
   { component: "Cta", source: CTA, figmaSet: "[CTA]", nodeId: "14942:51398" },
   { component: "Checkbox", source: CHECKBOX, figmaSet: "[Checkbox]", nodeId: "654:107836" },
   { component: "TextField", source: TEXTFIELD, figmaSet: "[Text Field] Text", nodeId: "2230:35899" },
+  { component: "TextField", source: TEXTFIELD, figmaSet: "[Text Field] Password", nodeId: "2230:36072" },
+  { component: "TextField", source: TEXTFIELD, figmaSet: "[Text Field] RRN", nodeId: "2230:36204" },
+  { component: "TextField", source: TEXTFIELD, figmaSet: "[Text Field] Card", nodeId: "2230:36378" },
+  { component: "TextField", source: TEXTFIELD, figmaSet: "[Text Field] Phone", nodeId: "2230:36498" },
+  { component: "TextField", source: TEXTFIELD, figmaSet: "[Text Field] Email", nodeId: "2230:36622" },
+  { component: "Header", source: HEADER, figmaSet: "[Header]", nodeId: "645:16876" },
+  { component: "Header", source: HEADER, figmaSet: "[Header] Search", nodeId: "2498:50378" },
+  { component: "Header", source: HEADER, figmaSet: "[Header] Logo", nodeId: "3203:9737" },
 ];
 
 type MapEntry = { componentName: string; source: string };

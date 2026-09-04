@@ -12,7 +12,7 @@ export type CcMapping = {
   status: CcStatus;
 };
 
-export const GENERATED_AT = "2026-09-03T06:35:45.852Z";
+export const GENERATED_AT = "2026-09-04T02:02:29.404Z";
 
 export const MAPPINGS: CcMapping[] = [
   {
@@ -83,6 +83,62 @@ export const MAPPINGS: CcMapping[] = [
     "source": "packages/ui/src/components/text-field.tsx",
     "figmaSet": "[Text Field] Text",
     "nodeId": "2230:35899",
+    "status": "connected"
+  },
+  {
+    "component": "TextField",
+    "source": "packages/ui/src/components/text-field.tsx",
+    "figmaSet": "[Text Field] Password",
+    "nodeId": "2230:36072",
+    "status": "connected"
+  },
+  {
+    "component": "TextField",
+    "source": "packages/ui/src/components/text-field.tsx",
+    "figmaSet": "[Text Field] RRN",
+    "nodeId": "2230:36204",
+    "status": "connected"
+  },
+  {
+    "component": "TextField",
+    "source": "packages/ui/src/components/text-field.tsx",
+    "figmaSet": "[Text Field] Card",
+    "nodeId": "2230:36378",
+    "status": "connected"
+  },
+  {
+    "component": "TextField",
+    "source": "packages/ui/src/components/text-field.tsx",
+    "figmaSet": "[Text Field] Phone",
+    "nodeId": "2230:36498",
+    "status": "connected"
+  },
+  {
+    "component": "TextField",
+    "source": "packages/ui/src/components/text-field.tsx",
+    "figmaSet": "[Text Field] Email",
+    "nodeId": "2230:36622",
+    "status": "connected"
+  },
+  {
+    "component": "Header",
+    "source": "packages/ui/src/components/header.tsx",
+    "figmaSet": "[Header]",
+    "nodeId": "645:16876",
+    "status": "connected"
+  },
+  {
+    "component": "Header",
+    "source": "packages/ui/src/components/header.tsx",
+    "figmaSet": "[Header] Search",
+    "nodeId": "2498:50378",
+    "status": "connected"
+  },
+  {
+    "component": "Header",
+    "source": "packages/ui/src/components/header.tsx",
+    "figmaSet": "[Header] Logo",
+    "nodeId": "3203:9737",
     "status": "connected"
   }
 ];
