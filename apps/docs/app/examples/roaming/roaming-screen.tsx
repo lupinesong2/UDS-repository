@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, ButtonGroup, Checkbox, Cta, TextField, cn } from "@uds/ui";
+import { Button, ButtonGroup, Checkbox, Cta, Header, TextField, cn } from "@uds/ui";
 
 // 그룹핑(구조) 색 — 오버레이의 주인공
 const GROUP_0 = "#6366f1"; // 최상위 섹션 (OS Bar · Header · Module · CTA)
@@ -90,14 +90,6 @@ function StatusIcons() {
   );
 }
 
-function ChevronLeft() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M15 18l-6-6 6-6" />
-    </svg>
-  );
-}
-
 const OPTIONS = [
   { key: "voice", label: "음성 통화" },
   { key: "sms", label: "SMS" },
@@ -127,16 +119,9 @@ export function RoamingScreen() {
           </div>
         </Region>
 
-        {/* Header */}
-        <Region mode={mode} group={{ name: "Header", depth: 0 }} comp={{ name: "Header", kind: "custom" }}>
-          <div className="flex items-center gap-gap-12 bg-background-base-low px-component-x-20 py-component-y-6">
-            <button className="py-component-y-10 text-icon-base-primary" aria-label="뒤로">
-              <ChevronLeft />
-            </button>
-            <h1 className="text-title-small font-strong leading-[1.3] tracking-[-0.36px] text-text-base-primary">
-              해외로밍 사용요금조회
-            </h1>
-          </div>
+        {/* Header — 우리 컴포넌트 */}
+        <Region mode={mode} group={{ name: "Header", depth: 0 }} comp={{ name: "Header", kind: "uds" }}>
+          <Header category="title" onBack={() => {}} title="해외로밍 사용요금조회" />
         </Region>
 
         {/* Module 1 — [Module](바깥 패딩) > [Module Contents](항목 gap). 첫 모듈 pt=layout/y/40 */}
@@ -203,7 +188,7 @@ export function RoamingScreen() {
         </Region>
 
         {/* 남는 공간 → CTA를 바닥으로 */}
-        <div className="flex-1" />
+        <div className="min-h-[40px] flex-1" />
 
         {/* CTA — 최상위 그룹이자 우리 컴포넌트(Cta + ButtonGroup + Button) */}
         <Region

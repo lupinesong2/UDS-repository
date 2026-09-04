@@ -5,7 +5,7 @@ export const metadata = { title: "해외로밍 사용요금조회 — UDS 예시
 
 const BREAKDOWN: { area: string; use: "uds" | "custom"; detail: ReactNode }[] = [
   { area: "OS Bar Top", use: "custom", detail: <>상단 상태바(시간·신호·배터리). <code>@uds/ui</code>에 컴포넌트 없음 → 커스텀 마크업.</> },
-  { area: "Header", use: "custom", detail: <>뒤로가기 + 화면 제목. <code>Header</code> 컴포넌트 미보유 → 커스텀.</> },
+  { area: "Header", use: "uds", detail: <>뒤로가기 + 화면 제목 — 우리 <code>Header</code>(category=&quot;title&quot;).</> },
   { area: "Indicator Progress", use: "custom", detail: <>“1 / 2” 단계 표시. 컴포넌트 미보유 → 커스텀.</> },
   { area: "Module Header", use: "custom", detail: <>큰 제목(display/medium). 컴포넌트 미보유 → 커스텀.</> },
   { area: "TextField", use: "uds", detail: <><code>&lt;TextField label=&quot;고객번호&quot; required /&gt;</code> — 우리 컴포넌트.</> },
@@ -32,8 +32,8 @@ export default function RoamingExamplePage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Examples</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">해외로밍 사용요금조회</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">해외로밍 사용요금조회</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
           Figma 화면(<code>node 20601:58919</code>)을 그대로 구현한 402px 모바일 화면입니다. 지금까지
           만든 <code>@uds/ui</code> 컴포넌트(<code>TextField</code> · <code>Checkbox</code> ·{" "}
           <code>Cta</code> · <code>ButtonGroup</code> · <code>Button</code>)로 조립하고, 아직
@@ -47,7 +47,7 @@ export default function RoamingExamplePage() {
         <RoamingScreen />
       </div>
 
-      <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">
+      <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight">
         구성 분해 <span className="text-base font-normal text-text-base-tertiary">({udsCount}/{BREAKDOWN.length} 영역이 우리 컴포넌트)</span>
       </h2>
       <div className="mt-4 overflow-hidden rounded-large border">

@@ -5,7 +5,7 @@ export const metadata = { title: "배송지 입력 — UDS 예시" };
 
 const BREAKDOWN: { area: string; use: "uds" | "custom"; detail: ReactNode }[] = [
   { area: "OS Bar Top", use: "custom", detail: <>상단 상태바. 컴포넌트 없음 → 커스텀.</> },
-  { area: "Header", use: "custom", detail: <>뒤로가기 + 제목. 컴포넌트 없음 → 커스텀.</> },
+  { area: "Header", use: "uds", detail: <>뒤로가기 + 제목 — 우리 <code>Header</code>.</> },
   { area: "Module Header", use: "custom", detail: <>안내 제목(display/medium). 컴포넌트 없음 → 커스텀.</> },
   { area: "TextField ×5", use: "uds", detail: <>받는 사람 · 연락처 · 우편번호 · 기본주소 · 상세주소 — 우리 <code>TextField</code>.</> },
   { area: "Button (주소검색)", use: "uds", detail: <>우리 <code>Button</code>(module · outline · secondary).</> },
@@ -32,8 +32,8 @@ export default function AddressExamplePage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Examples</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">배송지 입력</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">배송지 입력</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
           지금까지 만든 <code>@uds/ui</code> 컴포넌트로 조립한 402px 배송지 입력 폼입니다 —{" "}
           <code>TextField</code>(받는 사람·연락처·우편번호·기본/상세 주소) · <code>Button</code>
           (주소검색) · <code>Checkbox</code>(기본 배송지) · <code>Cta</code>. 주소검색을 누르면
@@ -47,7 +47,7 @@ export default function AddressExamplePage() {
         <AddressScreen />
       </div>
 
-      <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">
+      <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight">
         구성 분해{" "}
         <span className="text-base font-normal text-text-base-tertiary">
           ({udsCount}/{BREAKDOWN.length} 영역이 우리 컴포넌트)

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, ButtonGroup, Checkbox, Cta, TextField, cn } from "@uds/ui";
+import { Button, ButtonGroup, Checkbox, Cta, Header, TextField, cn } from "@uds/ui";
 
 // 그룹핑(구조) 색 — 오버레이의 주인공
 const GROUP_0 = "#6366f1"; // 최상위 섹션 (OS Bar · Header · Module · CTA)
@@ -84,14 +84,6 @@ function StatusIcons() {
   );
 }
 
-function ChevronLeft() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M15 18l-6-6 6-6" />
-    </svg>
-  );
-}
-
 export function AddressScreen() {
   // 오버레이 컨트롤 제거 — Region은 순수 패스스루(mode="off").
   const mode = "off" as const;
@@ -128,16 +120,9 @@ export function AddressScreen() {
           </div>
         </Region>
 
-        {/* Header */}
-        <Region mode={mode} group={{ name: "Header", depth: 0 }} comp={{ name: "Header", kind: "custom" }}>
-          <div className="flex items-center gap-gap-12 bg-background-base-low px-component-x-20 py-component-y-6">
-            <button className="py-component-y-10 text-icon-base-primary" aria-label="뒤로">
-              <ChevronLeft />
-            </button>
-            <h1 className="text-title-small font-strong leading-[1.3] tracking-[-0.36px] text-text-base-primary">
-              배송지 입력
-            </h1>
-          </div>
+        {/* Header — 우리 컴포넌트 */}
+        <Region mode={mode} group={{ name: "Header", depth: 0 }} comp={{ name: "Header", kind: "uds" }}>
+          <Header category="title" onBack={() => {}} title="배송지 입력" />
         </Region>
 
         {done ? (
@@ -159,20 +144,27 @@ export function AddressScreen() {
           </div>
         ) : (
           <>
-            {/* Module 1 — 안내 제목 */}
+            {/* 모듈 영역 — Header/CTA는 고정, 이 영역만 세로 스크롤. gap-40(로밍 규칙)로 콘텐츠가
+                874px를 넘어도 CTA는 바닥에 고정된다(실제 모바일 폼 동작). min-h-0 이 있어야 flex-1이
+                줄어들며 overflow 스크롤이 켜진다. */}
+            <div className="flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {/* Module 1 — [Module](바깥 패딩) > [Module Contents](항목 gap). 첫 모듈 pt=layout/y/40 */}
             <Region mode={mode} group={{ name: "Module", depth: 0 }} className="flex w-full flex-col px-layout-x-20 pt-layout-y-40">
-              <Region mode={mode} comp={{ name: "Module Header", kind: "custom" }}>
-                <h2 className="text-display-medium font-strong leading-[1.3] tracking-[-0.56px] text-text-base-primary">
-                  어디로
-                  <br />
-                  배송해 드릴까요?
-                </h2>
+              <Region mode={mode} group={{ name: "Module Contents", depth: 1 }} className="flex w-full flex-col gap-gap-16">
+                <Region mode={mode} comp={{ name: "Module Header", kind: "custom" }}>
+                  <h2 className="text-display-medium font-strong leading-[1.3] tracking-[-0.56px] text-text-base-primary">
+                    어디로
+                    <br />
+                    배송해 드릴까요?
+                  </h2>
+                </Region>
               </Region>
             </Region>
 
-            {/* Module 2 — 입력 폼 */}
-            <Region mode={mode} group={{ name: "Module", depth: 0 }} className="flex w-full flex-col px-layout-x-20 pt-layout-y-64">
-              <Region mode={mode} group={{ name: "Module Contents", depth: 1 }} className="flex w-full flex-col gap-gap-16">
+            {/* Module 2 — 입력 폼. 이후 모듈: pt=layout/y/64, contents 최상위 블록 gap=gap/40 (로밍 규칙).
+                pb-layout-y-40: 스크롤 바닥에서 마지막 필드가 CTA에 붙지 않도록 여백 */}
+            <Region mode={mode} group={{ name: "Module", depth: 0 }} className="flex w-full flex-col px-layout-x-20 pt-layout-y-64 pb-layout-y-40">
+              <Region mode={mode} group={{ name: "Module Contents", depth: 1 }} className="flex w-full flex-col gap-gap-40">
                 <Region mode={mode} comp={{ name: "TextField", kind: "uds" }}>
                   <TextField
                     label="받는 사람"
@@ -228,26 +220,25 @@ export function AddressScreen() {
                         onChange={(e) => setDetail(e.target.value)}
                       />
                     </Region>
+                    {/* 기본 배송지 체크박스 — 주소 인풋과 한 블록(gap-8)으로 묶음 */}
+                    <Region mode={mode} comp={{ name: "Checkbox", kind: "uds" }} className="self-start">
+                      <Checkbox
+                        size="small"
+                        fontWeight="base"
+                        checked={asDefault}
+                        onChange={(e) => setAsDefault(e.target.checked)}
+                      >
+                        기본 배송지로 설정
+                      </Checkbox>
+                    </Region>
                   </div>
-                </Region>
-
-                <Region mode={mode} comp={{ name: "Checkbox", kind: "uds" }} className="self-start">
-                  <Checkbox
-                    size="small"
-                    fontWeight="base"
-                    checked={asDefault}
-                    onChange={(e) => setAsDefault(e.target.checked)}
-                  >
-                    기본 배송지로 설정
-                  </Checkbox>
                 </Region>
               </Region>
             </Region>
 
-            {/* 남는 공간 → CTA를 바닥으로 */}
-            <div className="min-h-[40px] flex-1" />
+            </div>
 
-            {/* CTA — 우리 컴포넌트 (Cta + ButtonGroup + Button) */}
+            {/* CTA — 스크롤 영역 밖 → 항상 바닥 고정 (Cta + ButtonGroup + Button) */}
             <Region mode={mode} group={{ name: "CTA", depth: 0 }} comp={{ name: "Cta · ButtonGroup · Button", kind: "uds" }}>
               <Cta hasSystemUiBottom className="rounded-b-[40px]">
                 <ButtonGroup direction="column">
