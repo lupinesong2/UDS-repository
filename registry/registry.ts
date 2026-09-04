@@ -160,7 +160,7 @@ export const registry: RegistryItem[] = [
     type: "registry:ui",
     title: "Text Field",
     description:
-      "이름·주소·검색어 등 자유로운 문자열을 입력하는 기본 텍스트 입력 필드. Figma [Text Field] Text 세트에 대응한다. label/required(별표) · placeholder · error(빨간 링+빨간 메시지) · disabled(네이티브) 상태와, 하단 supporting messages(도움말 최대 3개), 끝 슬롯(iconEnd), 지우기 버튼(onClear)을 지원한다. 포커스(isTyping)는 :focus-within로 처리된다.",
+      "텍스트 입력 필드. Figma [Text Field] Text·Password·Card·RRN·Phone·Email 여섯 세트를 variant 축으로 병합한다. variant(text·password·card·rrn·phone·email)가 네이티브 type/inputMode·기본 placeholder를 정하고, password는 표시/숨김(eye) 토글, phone/email은 통신사·도메인 select를 leading/trailing 슬롯으로 받는다. label/required · error · disabled 상태, supporting messages(최대 3개), iconEnd, onClear 지원. 포커스(isTyping)는 :focus-within.",
     dependencies: ["class-variance-authority", "clsx", "tailwind-merge"],
     files: [
       { src: "components/text-field.tsx", target: "components/ui/text-field.tsx", type: "registry:ui" },
@@ -170,6 +170,7 @@ export const registry: RegistryItem[] = [
     meta: {
       ai: [
         "[구조] TextField는 label(상단) + 입력 박스 + supporting messages(하단)로 구성된다. 라벨은 label 프롭, 도움말은 messages 배열(최대 3개)로 전달한다. 값/onChange 등은 네이티브 input 속성이다.",
+        "[맥락] variant로 유형을 고른다: text(기본)·password(마스킹+eye 토글)·card(0000-0000 숫자)·rrn(주민번호 숫자)·phone·email. variant가 네이티브 type/inputMode와 기본 placeholder를 정한다. phone은 통신사 select를 leading, email은 도메인 select를 trailing 슬롯으로 넣는다.",
         "[상태] isTyping(포커스)은 프롭이 아니라 :focus-within로 처리된다(검은 1px 링). isDisabled는 네이티브 disabled, isError는 error 프롭으로 지정한다. error와 disabled는 독립적이며 둘 다 true면 error(빨강)가 우선한다.",
         "[콘텐츠] required는 마젠타 별표를 표시하고 네이티브 required도 설정한다. placeholder는 네이티브 속성이다. 끝 슬롯 아이콘(예: mic)은 iconEnd, 입력값 지우기 버튼은 onClear로 전달한다(onClear가 있으면 close-circle 버튼이 렌더된다).",
         "[색상·토큰] 필드 배경=container/base/high, 입력 텍스트=text/base/primary, placeholder=text/base/quaternary, 캐럿=container/brand/primary, 포커스 링=status/border/selected, 에러 링=status/border/negative, 메시지=text/base/tertiary(기본)·status/text/disabled(비활성)·status/text/negative(에러). 모두 토큰 바인딩, 하드코딩 금지.",

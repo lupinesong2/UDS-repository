@@ -54,7 +54,7 @@
       "name": "text-field",
       "type": "registry:ui",
       "title": "Text Field",
-      "description": "이름·주소·검색어 등 자유로운 문자열을 입력하는 기본 텍스트 입력 필드. Figma [Text Field] Text 세트에 대응한다. label/required(별표) · placeholder · error(빨간 링+빨간 메시지) · disabled(네이티브) 상태와, 하단 supporting messages(도움말 최대 3개), 끝 슬롯(iconEnd), 지우기 버튼(onClear)을 지원한다. 포커스(isTyping)는 :focus-within로 처리된다.",
+      "description": "텍스트 입력 필드. Figma [Text Field] Text·Password·Card·RRN·Phone·Email 여섯 세트를 variant 축으로 병합한다. variant(text·password·card·rrn·phone·email)가 네이티브 type/inputMode·기본 placeholder를 정하고, password는 표시/숨김(eye) 토글, phone/email은 통신사·도메인 select를 leading/trailing 슬롯으로 받는다. label/required · error · disabled 상태, supporting messages(최대 3개), iconEnd, onClear 지원. 포커스(isTyping)는 :focus-within.",
       "dependencies": [
         "class-variance-authority",
         "clsx",

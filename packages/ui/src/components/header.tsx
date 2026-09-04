@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva } from "class-variance-authority";
-import { ChevronLeftIcon, SearchIcon } from "@uds/icons";
+import { ChevronLeftIcon, CloseCircleIcon, SearchIcon } from "@uds/icons";
 import { cn } from "../lib/utils.ts";
 
 /**
@@ -39,7 +39,10 @@ function BackButton({ onClick }: { onClick?: () => void }) {
 
 const titleText =
   "truncate text-title-small font-strong leading-[1.3] tracking-[-0.36px] text-text-base-primary";
-const actionSlot = "flex shrink-0 items-center gap-gap-16 [&_svg]:size-6";
+const actionSlot = "flex shrink-0 items-center gap-gap-16 text-icon-base-primary [&_svg]:size-6";
+// search field end-slot buttons (지우기 / 검색) — 20px icons per Figma "size=small", with focus ring
+const searchIconBtn =
+  "flex shrink-0 rounded-small focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-status-border-selected";
 
 type HeaderVariantProps =
   | { category?: "title"; align?: "left" | "center" }
@@ -90,6 +93,28 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
     const back = onBack ? <BackButton onClick={onBack} /> : null;
     const right = actions ? <div className={actionSlot}>{actions}</div> : null;
 
+    // search value — controlled by `value` if provided, else internal, so the clear (✕) button
+    // works out of the box. Clearing uses the native setter + input event (like TextField).
+    const [searchInner, setSearchInner] = React.useState("");
+    const searchControlled = value !== undefined;
+    const searchValue = searchControlled ? String(value ?? "") : searchInner;
+    const searchRef = React.useRef<HTMLInputElement>(null);
+    const handleSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+      if (!searchControlled) setSearchInner(e.target.value);
+      onChange?.(e);
+    };
+    const clearSearch = () => {
+      const node = searchRef.current;
+      const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set;
+      if (node && setter) {
+        setter.call(node, "");
+        node.dispatchEvent(new Event("input", { bubbles: true }));
+        node.focus();
+      } else if (!searchControlled) {
+        setSearchInner("");
+      }
+    };
+
     return (
       <header ref={ref} className={cn(headerVariants({ onFrameHigh }), className)} {...rest}>
         <div className="relative flex w-full items-center gap-gap-12">
@@ -133,25 +158,36 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
               {back}
               <div
                 className={cn(
-                  "flex h-[44px] min-w-0 flex-1 items-center gap-gap-8 rounded-small px-component-x-12",
+                  "flex h-[44px] min-w-0 flex-1 items-center gap-gap-16 rounded-small px-component-x-12",
                   onFrameHigh ? "bg-container-base-low-level1" : "bg-container-base-high"
                 )}
               >
                 <input
+                  ref={searchRef}
                   type="search"
                   placeholder={placeholder}
-                  value={value}
-                  onChange={onChange}
+                  value={searchValue}
+                  onChange={handleSearchChange}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") onSearch?.();
                   }}
                   className="min-w-0 flex-1 bg-transparent text-body-medium font-base leading-normal text-text-base-primary caret-container-brand-primary outline-none placeholder:text-text-base-quaternary [&::-webkit-search-cancel-button]:appearance-none"
                 />
-                <button type="button" onClick={onSearch} aria-label="검색" className="flex shrink-0 text-icon-base-primary">
-                  <SearchIcon className="size-6" />
-                </button>
+                {/* end slot — Figma [Search] typing: 텍스트가 있으면 지우기(✕)+검색(🔍) 2개, 없으면 검색만 */}
+                <div className="flex shrink-0 items-center gap-gap-8">
+                  {searchValue.length > 0 && (
+                    <button type="button" onClick={clearSearch} aria-label="지우기" className={cn(searchIconBtn, "text-icon-base-secondary")}>
+                      <CloseCircleIcon className="size-5" />
+                    </button>
+                  )}
+                  <button type="button" onClick={onSearch} aria-label="검색" className={cn(searchIconBtn, "text-icon-base-primary")}>
+                    <SearchIcon className="size-5" />
+                  </button>
+                </div>
               </div>
-              {actions ? <div className="flex shrink-0 items-center [&_svg]:size-6">{actions}</div> : null}
+              {actions ? (
+                <div className="flex shrink-0 items-center text-icon-base-primary [&_svg]:size-6">{actions}</div>
+              ) : null}
             </>
           )}
         </div>
