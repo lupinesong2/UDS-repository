@@ -1,70 +1,8 @@
 import type { ReactNode } from "react";
-import { Button, type ButtonProps } from "@uds/ui";
 import { CodeBlock } from "../../../components/code-block.tsx";
 import { ButtonPlayground } from "./button-playground.tsx";
 
-// Build props for data-driven demos below. The component only accepts
-// Figma-defined combinations; our static tables are known-valid, so cast the
-// loosened row types back to ButtonProps for the mapped previews.
-function demo(category: string, variant?: string, hierarchy?: string): ButtonProps {
-  return { category, variant, hierarchy } as ButtonProps;
-}
-
 export const metadata = { title: "Button — UDS" };
-
-// One representative CTA per category, sized as in Figma.
-const CATEGORIES = [
-  {
-    category: "page",
-    label: "Page · 55px",
-    desc: "페이지 최상위 CTA. filled·ghost / primary·secondary.",
-  },
-  {
-    category: "module",
-    label: "Module · 44px",
-    desc: "모듈·카드 내부 액션. filled·outline·ghost / primary·secondary·tertiary(filled).",
-  },
-  {
-    category: "inline",
-    label: "Inline · 33px",
-    desc: "콘텐츠 흐름 속 텍스트형 액션. filled·outline·ghost / primary·secondary.",
-  },
-] as const;
-
-// Full variant × hierarchy matrix shown per category (Figma-defined only).
-const COMBOS = {
-  page: [
-    { variant: "filled", hierarchy: "primary", label: "Filled · Primary" },
-    { variant: "filled", hierarchy: "secondary", label: "Filled · Secondary" },
-    { variant: "ghost", hierarchy: "secondary", label: "Ghost · Secondary" },
-  ],
-  module: [
-    { variant: "filled", hierarchy: "primary", label: "Filled · Primary" },
-    { variant: "filled", hierarchy: "secondary", label: "Filled · Secondary" },
-    { variant: "filled", hierarchy: "tertiary", label: "Filled · Tertiary" },
-    { variant: "outline", hierarchy: "primary", label: "Outline · Primary" },
-    { variant: "outline", hierarchy: "secondary", label: "Outline · Secondary" },
-    { variant: "ghost", hierarchy: "primary", label: "Ghost · Primary" },
-    { variant: "ghost", hierarchy: "secondary", label: "Ghost · Secondary" },
-  ],
-  inline: [
-    { variant: "filled", hierarchy: "primary", label: "Filled · Primary" },
-    { variant: "filled", hierarchy: "secondary", label: "Filled · Secondary" },
-    { variant: "outline", hierarchy: "primary", label: "Outline · Primary" },
-    { variant: "outline", hierarchy: "secondary", label: "Outline · Secondary" },
-    { variant: "ghost", hierarchy: "primary", label: "Ghost · Primary" },
-    { variant: "ghost", hierarchy: "secondary", label: "Ghost · Secondary" },
-  ],
-} as const;
-
-// 24px sample icon (Figma icon slot size for page/module).
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 // Design tokens this component consumes (Figma-1:1).
 const TOKENS = [
@@ -90,23 +28,14 @@ const TOKENS = [
 // shadcn-style section heading.
 function H2({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+    <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
       {children}
     </h2>
   );
 }
 
 function H3({ children }: { children: ReactNode }) {
-  return <h3 className="mt-8 text-lg font-semibold tracking-tight">{children}</h3>;
-}
-
-// shadcn-style preview surface.
-function Preview({ children }: { children: ReactNode }) {
-  return (
-    <div className="mt-4 flex min-h-40 flex-wrap items-center justify-center gap-4 rounded-large border p-10">
-      {children}
-    </div>
-  );
+  return <h3 className="mt-8 text-base font-semibold tracking-tight">{children}</h3>;
 }
 
 export default function ButtonPage() {
@@ -114,8 +43,8 @@ export default function ButtonPage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Components</p>
-        <h1 className="mt-2 scroll-m-20 text-4xl font-bold tracking-tight">Button</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">Button</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
           동작을 트리거하는 클릭 가능한 요소. Figma <code>[Button]</code> 세트와 1:1로 대응하며,
           맥락을 고르는 <code>category</code>(page · module · inline) 축과 <code>variant</code> ×{" "}
           <code>hierarchy</code>로 구성됩니다.
@@ -156,67 +85,6 @@ export default function ButtonPage() {
           code={'<Button category="page" variant="filled" hierarchy="primary">\n  레이블\n</Button>'}
         />
       </div>
-
-      <H2>Examples</H2>
-
-      <H3>Category</H3>
-      <p className="mt-1 text-sm text-text-base-tertiary">
-        하나의 <code>Button</code>이 세 맥락을 담습니다. <code>category</code>로 크기·타이포·지원 축이 결정됩니다.
-      </p>
-      <div className="mt-4 grid gap-3">
-        {CATEGORIES.map((c) => (
-          <div key={c.category} className="flex items-center gap-4 rounded-large border p-6">
-            <span className="w-28 shrink-0 text-sm font-medium">{c.label}</span>
-            <Button {...demo(c.category)}>레이블</Button>
-            <span className="text-xs text-text-base-tertiary">{c.desc}</span>
-          </div>
-        ))}
-      </div>
-
-      {CATEGORIES.map((cat) => (
-        <div key={cat.category}>
-          <H3>{cat.label}</H3>
-          <Preview>
-            {COMBOS[cat.category].map((c) => (
-              <div key={c.label} className="flex flex-col items-center gap-2">
-                <Button {...demo(cat.category, c.variant, c.hierarchy)}>레이블</Button>
-                <span className="text-xs text-text-base-tertiary">{c.label}</span>
-              </div>
-            ))}
-          </Preview>
-        </div>
-      ))}
-
-      <H3>Icon</H3>
-      <p className="mt-1 text-sm text-text-base-tertiary">
-        <code>iconStart</code> / <code>iconEnd</code>로 아이콘을 배치합니다 (page·module 24px, inline 16px).
-      </p>
-      <Preview>
-        <Button iconStart={<ArrowIcon />}>이전</Button>
-        <Button iconEnd={<ArrowIcon />}>다음</Button>
-        <Button category="inline" variant="ghost" hierarchy="primary" iconEnd={<ArrowIcon />}>
-          더보기
-        </Button>
-      </Preview>
-      <div className="mt-3">
-        <CodeBlock code={'<Button iconEnd={<ArrowIcon />}>다음</Button>'} />
-      </div>
-
-      <H3>States</H3>
-      <p className="mt-1 text-sm text-text-base-tertiary">
-        상태는 프롭이 아니라 상호작용으로 표현됩니다 — hover·pressed·
-        <kbd className="rounded-small bg-container-base-high px-1 text-xs">Tab</kbd>(focus)으로 직접 확인하세요.
-      </p>
-      <Preview>
-        <div className="flex flex-col items-center gap-2">
-          <Button>레이블</Button>
-          <span className="text-xs text-text-base-tertiary">default</span>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <Button disabled>레이블</Button>
-          <span className="text-xs text-text-base-tertiary">disabled</span>
-        </div>
-      </Preview>
 
       <H2>API Reference</H2>
       <div className="mt-4 overflow-hidden rounded-large border">

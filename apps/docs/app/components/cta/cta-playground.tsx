@@ -1,21 +1,20 @@
 "use client";
 
 import { Button, ButtonGroup, Cta } from "@uds/ui";
-import { PropsPlayground, type Control } from "../../../components/props-playground.tsx";
+import { PropsPlayground, type PlaygroundCase } from "../../../components/props-playground.tsx";
 
-// Controls mirror the Figma [CTA] component properties: the `onFrameHigh`
-// variant axis and the `hasSystemUiBottom` boolean. The action itself is a
-// composed ButtonGroup — the Code tab shows that real structure.
-const controls: Control[] = [
-  { name: "onFrameHigh", type: "boolean", default: false },
-  { name: "hasSystemUiBottom", type: "boolean", default: true },
+// Figma [CTA] combinations — the onFrameHigh axis × the bottom system-UI toggle.
+const cases: PlaygroundCase[] = [
+  { label: "기본", state: { onFrameHigh: false, hasSystemUiBottom: true } },
+  { label: "onFrameHigh", state: { onFrameHigh: true, hasSystemUiBottom: true } },
+  { label: "시스템 UI 없음", state: { onFrameHigh: false, hasSystemUiBottom: false } },
 ];
 
 export function CtaPlayground() {
   return (
     <PropsPlayground
       componentName="Cta"
-      controls={controls}
+      cases={cases}
       render={(props) => (
         <div className="w-[402px] max-w-full">
           <Cta

@@ -1,31 +1,37 @@
 "use client";
 
 import { Checkbox } from "@uds/ui";
-import { PropsPlayground, type Control } from "../../../components/props-playground.tsx";
+import { PropsPlayground, type PlaygroundCase } from "../../../components/props-playground.tsx";
 
-// Controls mirror the Figma [Checkbox] properties, in Figma order:
-// size · fontWeight · isChecked · isDisabled (all independent — full matrix).
-// isChecked/isDisabled map to the native checked/disabled attributes.
-const controls: Control[] = [
-  { name: "size", type: "select", options: ["medium", "small"], default: "medium" },
-  { name: "fontWeight", type: "select", options: ["strong", "base"], default: "strong" },
-  { name: "isChecked", type: "boolean", default: false },
-  { name: "isDisabled", type: "boolean", default: false },
-  { name: "children", type: "string", default: "레이블" },
-];
+// Figma [Checkbox] combinations — grouped by size (Medium / Small).
+const mk = (size: string, fontWeight: string, isChecked: boolean, isDisabled = false) => ({
+  size,
+  fontWeight,
+  isChecked,
+  isDisabled,
+  children: "레이블",
+});
+
+const cases: PlaygroundCase[] = (["medium", "small"] as const).flatMap((size) => [
+  { label: "strong · unchecked", state: mk(size, "strong", false) },
+  { label: "strong · checked", state: mk(size, "strong", true) },
+  { label: "base · unchecked", state: mk(size, "base", false) },
+  { label: "base · checked", state: mk(size, "base", true) },
+  { label: "checked · disabled", state: mk(size, "strong", true, true) },
+]);
 
 export function CheckboxPlayground() {
   return (
     <PropsPlayground
       componentName="Checkbox"
-      controls={controls}
+      cases={cases}
+      groupBy="size"
       render={(p) => (
         <Checkbox
           size={p.size as "medium" | "small"}
           fontWeight={p.fontWeight as "strong" | "base"}
-          checked={p.isChecked as boolean}
+          defaultChecked={p.isChecked as boolean}
           disabled={p.isDisabled as boolean}
-          readOnly
         >
           {String(p.children)}
         </Checkbox>

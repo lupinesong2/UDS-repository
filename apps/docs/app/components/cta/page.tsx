@@ -116,14 +116,14 @@ const AI_GUIDE: { category: string; rule: ReactNode }[] = [
 
 function H2({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+    <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
       {children}
     </h2>
   );
 }
 
 function H3({ children }: { children: ReactNode }) {
-  return <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">{children}</h3>;
+  return <h3 className="mt-8 scroll-m-20 text-base font-semibold tracking-tight">{children}</h3>;
 }
 
 function OriginBadge({ origin }: { origin: Origin }) {
@@ -147,8 +147,8 @@ export default function CtaPage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Components</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">CTA</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">CTA</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
           화면 하단에 주요 행동을 고정 배치하는 액션 영역. Figma <code>[CTA]</code> 세트에
           대응합니다. 배경 축 <code>onFrameHigh</code>와 하단 시스템 UI만 소유하고, 액션은 자식{" "}
           <code>ButtonGroup</code>·<code>Button</code>이 담당합니다.

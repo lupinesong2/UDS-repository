@@ -129,14 +129,14 @@ const AI_GUIDE: { category: string; rule: ReactNode }[] = [
 
 function H2({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+    <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
       {children}
     </h2>
   );
 }
 
 function H3({ children }: { children: ReactNode }) {
-  return <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">{children}</h3>;
+  return <h3 className="mt-8 scroll-m-20 text-base font-semibold tracking-tight">{children}</h3>;
 }
 
 function OriginBadge({ origin }: { origin: Origin }) {
@@ -160,8 +160,8 @@ export default function CheckboxPage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Components</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">Checkbox</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">Checkbox</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
           하나 이상 선택할 수 있는 선택 컨트롤. Figma <code>[Checkbox]</code> 세트에 대응하며,{" "}
           <code>size</code>(medium·small) × <code>fontWeight</code>(strong·base) 스타일 축과 네이티브{" "}
           <code>checked</code>/<code>disabled</code> 상태를 가집니다. 라벨을 감싸는 접근성 있는

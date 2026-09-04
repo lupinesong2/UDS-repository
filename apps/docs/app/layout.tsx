@@ -27,8 +27,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" suppressHydrationWarning>
       <body>
-        <div className="mx-auto flex min-h-screen max-w-6xl">
-          <aside className="w-56 shrink-0 border-r p-6">
+        <div className="flex min-h-screen">
+          <aside className="sticky top-0 h-screen w-56 shrink-0 overflow-y-auto border-r p-6">
             <Link href="/" className="text-lg font-semibold tracking-tight">
               UDS
             </Link>
@@ -87,7 +87,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               ))}
             </nav>
           </aside>
-          <main className="flex-1 p-10">{children}</main>
+          <main className="flex-1 px-8 py-10">
+            <div className="mx-auto w-full max-w-3xl">{children}</div>
+          </main>
         </div>
       </body>
     </html>

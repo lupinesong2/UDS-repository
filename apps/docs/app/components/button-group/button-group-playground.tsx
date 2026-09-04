@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, ButtonGroup, type ButtonProps } from "@uds/ui";
-import { PropsPlayground, type Control } from "../../../components/props-playground.tsx";
+import { PropsPlayground, type PlaygroundCase } from "../../../components/props-playground.tsx";
 
 // The playground mirrors the Figma component-set properties so every variation
 // built in Figma can be reproduced here:
@@ -35,28 +35,16 @@ const ORIENTATION: Record<Content, Dir> = {
   "filled+ghost": "column",
 };
 
-// Controls mirror the Figma property order (context = which set, then the
-// variant props `direction`, `contentType`) and are *dependent*: contentType
-// only shows what the chosen context + direction actually define — so cases
-// like "Dialog · filled+outline" or "filled+ghost · row" never appear.
-const controls: Control[] = [
-  {
-    name: "context",
-    type: "select",
-    options: ["CTA", "Bottom Sheet", "Dialog", "Card"],
-    default: "CTA",
-  },
-  { name: "direction", type: "select", options: ["row", "column"], default: "row" },
-  {
-    name: "contentType",
-    type: "select",
-    options: (s) =>
-      CONTENT_BY_CONTEXT[s.context as Ctx].filter(
-        (ct) => ORIENTATION[ct] === (s.direction as Dir)
-      ),
-    default: "filled+filled",
-  },
-];
+// The case list — every valid (context, contentType) combo, grouped by context.
+// Impossible combos (e.g. Dialog · filled+outline) simply aren't in the list.
+// direction is derived from the contentType (Figma gives each one orientation).
+const cases: PlaygroundCase[] = (["CTA", "Bottom Sheet", "Dialog", "Card"] as Ctx[]).flatMap(
+  (context) =>
+    CONTENT_BY_CONTEXT[context].map((contentType) => ({
+      label: contentType,
+      state: { context, contentType, direction: ORIENTATION[contentType] },
+    }))
+);
 
 // Per Figma set, the `Button` props for each role (main action / paired action /
 // text action). This is the single source of truth for both Preview and Code.
@@ -115,7 +103,8 @@ export function ButtonGroupPlayground() {
   return (
     <PropsPlayground
       componentName="ButtonGroup"
-      controls={controls}
+      cases={cases}
+      groupBy="context"
       render={(props) => {
         const context = props.context as Ctx;
         const contentType = props.contentType as Content;

@@ -160,14 +160,14 @@ const AI_GUIDE: { category: string; rule: ReactNode }[] = [
 
 function H2({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+    <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
       {children}
     </h2>
   );
 }
 
 function H3({ children }: { children: ReactNode }) {
-  return <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">{children}</h3>;
+  return <h3 className="mt-8 scroll-m-20 text-base font-semibold tracking-tight">{children}</h3>;
 }
 
 function OriginBadge({ origin }: { origin: Origin }) {
@@ -191,8 +191,8 @@ export default function HeaderPage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Components</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">Header</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">Header</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
           화면 상단 내비게이션 바. Figma <code>[Header]</code> · <code>[Header] Search</code> ·{" "}
           <code>[Header] Logo</code> 세 세트를 <code>category</code> 축으로 병합했습니다.{" "}
           <code>category</code>(title·search·logo) × <code>align</code>(left·center, search 제외) ×{" "}

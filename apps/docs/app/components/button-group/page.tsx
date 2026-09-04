@@ -168,14 +168,14 @@ const PROPS: {
 // shadcn-style section heading.
 function H2({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+    <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
       {children}
     </h2>
   );
 }
 
 function H3({ children }: { children: ReactNode }) {
-  return <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">{children}</h3>;
+  return <h3 className="mt-8 scroll-m-20 text-base font-semibold tracking-tight">{children}</h3>;
 }
 
 // Origin chip — outline + text share currentColor, so one class controls both.
@@ -200,8 +200,8 @@ export default function ButtonGroupPage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Components</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">Button Group</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">Button Group</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
           화면 하단·Bottom Sheet·Dialog·Card에서 주요 행동을 함께 배치하는 CTA 버튼 그룹. Figma{" "}
           <code>[Button Group] CTA</code>·<code>Bottom Sheet</code>·<code>Dialog</code>·
           <code>Card</code> 네 세트와 1:1로 대응합니다. 레이아웃 축 <code>direction</code>(row ·

@@ -39,19 +39,19 @@ const SIZES: { px: string; util: string; use: ReactNode }[] = [
 ];
 
 // 색상: currentColor라 text-* 토큰으로 지정. 아래 매핑만 사용.
-const COLORS: { use: string; token: string; util: string }[] = [
+const COLORS: { use: string; token: string; util: string; onDark?: boolean; inherit?: boolean }[] = [
   { use: "기본 아이콘", token: "icon/base/primary (#1a1a1a)", util: "text-icon-base-primary" },
   { use: "보조·힌트·placeholder", token: "icon/base/secondary (#747474)", util: "text-icon-base-secondary" },
   { use: "에러", token: "status/text/negative (#da0707)", util: "text-status-text-negative" },
   { use: "선택·성공", token: "status/icon/selected (#1a1a1a)", util: "text-status-icon-selected" },
   { use: "비활성", token: "status/icon/disabled-inverseBlack (#1a1a1a29)", util: "text-status-icon-disabled-inverse-black" },
-  { use: "반전(어두운 배경)", token: "icon/base/inverseWhite (#fff)", util: "text-icon-base-inverse-white" },
-  { use: "문맥 상속", token: "currentColor", util: "부모 text 색을 그대로 상속" },
+  { use: "반전(어두운 배경)", token: "icon/base/inverseWhite (#fff)", util: "text-icon-base-inverse-white", onDark: true },
+  { use: "문맥 상속", token: "currentColor", util: "부모 text 색을 그대로 상속", inherit: true },
 ];
 
 function H2({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+    <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
       {children}
     </h2>
   );
@@ -62,8 +62,8 @@ export default function IconsPage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Foundations</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">Icons</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">Icons</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
           Figma <code>[Test] Core Icon Library</code>에서 추출한 24×24 아이콘입니다. 색은{" "}
           <code>currentColor</code>라 <code>text-*</code> 토큰으로 물들고, 크기는 <code>size-*</code>로
           조절합니다. <code>@uds/icons</code>에서 개별 컴포넌트로 가져다 씁니다.
@@ -132,6 +132,7 @@ export default function IconsPage() {
         <table className="w-full text-sm">
           <thead className="bg-container-base-high/40 text-left">
             <tr>
+              <th className="p-3 font-medium">미리보기</th>
               <th className="p-3 font-medium">용도</th>
               <th className="p-3 font-medium">토큰</th>
               <th className="p-3 font-medium">유틸</th>
@@ -139,7 +140,21 @@ export default function IconsPage() {
           </thead>
           <tbody className="divide-y">
             {COLORS.map((c) => (
-              <tr key={c.use} className="align-top">
+              <tr key={c.use} className="align-middle">
+                <td className="p-3">
+                  {c.onDark ? (
+                    <span className="grid size-9 place-items-center rounded-medium bg-container-base-black">
+                      <InfoCircleIcon className={`size-6 ${c.util}`} />
+                    </span>
+                  ) : c.inherit ? (
+                    // currentColor — 부모 text 색을 그대로 상속
+                    <span className="text-text-brand-primary-high">
+                      <InfoCircleIcon className="size-6" />
+                    </span>
+                  ) : (
+                    <InfoCircleIcon className={`size-6 ${c.util}`} />
+                  )}
+                </td>
                 <td className="whitespace-nowrap p-3 text-xs">{c.use}</td>
                 <td className="p-3 font-mono text-xs text-text-base-tertiary">{c.token}</td>
                 <td className="p-3 font-mono text-xs">{c.util}</td>
@@ -147,15 +162,6 @@ export default function IconsPage() {
             ))}
           </tbody>
         </table>
-      </div>
-      <div className="mt-4 flex flex-wrap items-center gap-6 rounded-large border p-6">
-        <ChevronLeftIcon className="size-6 text-icon-base-primary" />
-        <SearchIcon className="size-6 text-icon-base-secondary" />
-        <ErrorCircleIcon className="size-6 text-status-text-negative" />
-        <CheckIcon className="size-6 text-status-icon-selected" />
-        <span className="grid size-8 place-items-center rounded-medium bg-container-base-black">
-          <CheckIcon className="size-6 text-icon-base-inverse-white" />
-        </span>
       </div>
     </article>
   );

@@ -4,7 +4,7 @@ import { Button } from "@uds/ui";
 export default function HomePage() {
   return (
     <div className="max-w-2xl">
-      <h1 className="text-3xl font-bold tracking-tight">UDS — Unified Design System</h1>
+      <h1 className="text-3xl font-semibold tracking-tight">UDS — Unified Design System</h1>
       <p className="mt-3 text-text-base-tertiary">
         Figma 디자인 자산을 코드로 자산화한 컴포넌트 레지스트리입니다. 디자인 토큰 기반으로
         구조화되어 있으며, shadcn 호환 레지스트리를 통해 AI 툴과 코드베이스로 배포됩니다.

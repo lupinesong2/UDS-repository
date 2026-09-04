@@ -28,6 +28,31 @@ type Origin = "figma" | "code" | "both";
 
 const PROPS: { prop: string; type: string; def: string; origin: Origin; desc: ReactNode }[] = [
   {
+    prop: "variant",
+    type: '"text" | "password" | "card" | "rrn" | "phone" | "email"',
+    def: '"text"',
+    origin: "figma",
+    desc: (
+      <>
+        Figma 세트 병합 축. 네이티브 <code>type</code>/<code>inputMode</code>·기본 placeholder를
+        정합니다. <code>password</code>=eye 토글, <code>card/rrn</code>=숫자, <code>phone</code>=
+        <code>leading</code> select, <code>email</code>=<code>trailing</code> select.
+      </>
+    ),
+  },
+  {
+    prop: "leading / trailing",
+    type: "ReactNode",
+    def: "—",
+    origin: "both",
+    desc: (
+      <>
+        필드 옆 sibling 박스 (Figma <code>[Dropdown Slot]</code>) — <code>phone</code>의 통신사
+        select는 <code>leading</code>, <code>email</code>의 도메인 select는 <code>trailing</code>.
+      </>
+    ),
+  },
+  {
     prop: "label",
     type: "ReactNode",
     def: "—",
@@ -178,14 +203,14 @@ const AI_GUIDE: { category: string; rule: ReactNode }[] = [
 
 function H2({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+    <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
       {children}
     </h2>
   );
 }
 
 function H3({ children }: { children: ReactNode }) {
-  return <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">{children}</h3>;
+  return <h3 className="mt-8 scroll-m-20 text-base font-semibold tracking-tight">{children}</h3>;
 }
 
 function OriginBadge({ origin }: { origin: Origin }) {
@@ -209,13 +234,14 @@ export default function TextFieldPage() {
     <article className="max-w-3xl">
       <header>
         <p className="text-sm font-medium text-text-brand-primary-high">Components</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">Text Field</h1>
-        <p className="mt-3 text-lg text-text-base-tertiary">
-          이름·주소·검색어 등 자유로운 문자열을 입력하는 기본 텍스트 입력 필드. Figma{" "}
-          <code>[Text Field] Text</code> 세트에 대응하며, <code>label</code>/<code>required</code> ·{" "}
-          <code>placeholder</code> · <code>error</code> · <code>disabled</code> 상태와 하단 도움말
-          메시지(<code>messages</code>)를 가집니다. 포커스(<code>isTyping</code>)는{" "}
-          <code>:focus-within</code>으로 처리됩니다.
+        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">Text Field</h1>
+        <p className="mt-3 text-base text-text-base-tertiary">
+          텍스트 입력 필드. Figma <code>[Text Field]</code> Text·Password·Card·RRN·Phone·Email 여섯
+          세트를 <code>variant</code> 축으로 병합했습니다. <code>variant</code>가 네이티브{" "}
+          <code>type</code>/<code>inputMode</code>·기본 placeholder를 정하고(password=eye 토글,
+          phone/email=<code>leading</code>/<code>trailing</code> select), <code>label</code>/
+          <code>required</code> · <code>error</code> · <code>disabled</code> 상태와 도움말(
+          <code>messages</code>)을 가집니다. 포커스(<code>isTyping</code>)는 <code>:focus-within</code>.
         </p>
       </header>
 
