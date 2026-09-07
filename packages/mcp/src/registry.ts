@@ -20,13 +20,20 @@ export function registryBase(): string {
   return process.env.UDS_REGISTRY ?? LOCAL_DEFAULT;
 }
 
-export async function loadJson<T>(name: string): Promise<T> {
-  const base = registryBase();
+/** Sibling of the registry: `.../public/r` → `.../public/examples` (URL or dir). */
+export function examplesBase(): string {
+  return registryBase().replace(/([\\/])r$/, "$1examples");
+}
+
+async function loadFrom<T>(base: string, name: string): Promise<T> {
   const isUrl = /^https?:/.test(base);
   if (isUrl) {
     const res = await fetch(`${base}/${name}.json`);
-    if (!res.ok) throw new Error(`registry ${name} → ${res.status}`);
+    if (!res.ok) throw new Error(`${base}/${name} → ${res.status}`);
     return (await res.json()) as T;
   }
   return JSON.parse(await readFile(join(base, `${name}.json`), "utf8")) as T;
 }
+
+export const loadJson = <T>(name: string): Promise<T> => loadFrom<T>(registryBase(), name);
+export const loadExample = <T>(name: string): Promise<T> => loadFrom<T>(examplesBase(), name);

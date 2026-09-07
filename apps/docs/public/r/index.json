@@ -51,6 +51,39 @@
       ]
     },
     {
+      "name": "radio",
+      "type": "registry:ui",
+      "title": "Radio",
+      "description": "여러 옵션 중 하나만 선택하는 단일 선택 컨트롤. Figma [Radio] 세트에 대응한다. size(medium 20px·small 16px 원) × fontWeight(strong·base)의 스타일 축과, 네이티브 checked/disabled로 표현되는 상태를 가진다. 같은 name을 공유하면 하나의 그룹이 되어 한 번에 하나만 선택된다. 라벨을 감싸는 접근성 있는 네이티브 input + 토큰 스타일 원(테두리 두께로 선택 표현)으로 구현된다.",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "chip",
+      "type": "registry:ui",
+      "title": "Chip",
+      "description": "칩 원자 컴포넌트. Figma [Chip … Item] 심볼에 대응한다. variant(filter·trigger·selection) × size(filter·trigger만 medium·small) × selected(filter·selection만)의 조합만 타입으로 허용한다. filter=pill 토글, trigger=pill+chevron(메뉴 호출), selection=외곽선 사각형 토글. 색은 모두 토큰에 바인딩된다.",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "chip-group",
+      "type": "registry:ui",
+      "title": "Chip Group",
+      "description": "Chip들을 배치하는 레이아웃 컨테이너. Figma [Chip Group] Filter·Trigger·Selection 세트에 대응한다. wrap(줄바꿈/한 줄 스크롤) 레이아웃과 선택적 라벨(+필수 별표)만 소유하고, 칩의 생김새는 Chip이 소유한다 — ButtonGroup↔Button 관계와 같다. chipCount는 프롭이 아니라 넣는 Chip 자식 수다.",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
       "name": "text-field",
       "type": "registry:ui",
       "title": "Text Field",

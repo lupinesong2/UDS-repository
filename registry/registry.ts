@@ -156,6 +156,71 @@ export const registry: RegistryItem[] = [
     },
   },
   {
+    name: "radio",
+    type: "registry:ui",
+    title: "Radio",
+    description:
+      "여러 옵션 중 하나만 선택하는 단일 선택 컨트롤. Figma [Radio] 세트에 대응한다. size(medium 20px·small 16px 원) × fontWeight(strong·base)의 스타일 축과, 네이티브 checked/disabled로 표현되는 상태를 가진다. 같은 name을 공유하면 하나의 그룹이 되어 한 번에 하나만 선택된다. 라벨을 감싸는 접근성 있는 네이티브 input + 토큰 스타일 원(테두리 두께로 선택 표현)으로 구현된다.",
+    dependencies: ["class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      { src: "components/radio.tsx", target: "components/ui/radio.tsx", type: "registry:ui" },
+      { src: "lib/utils.ts", target: "lib/utils.ts", type: "registry:lib" },
+    ],
+    meta: {
+      ai: [
+        "[구조] Radio는 <label>이 네이티브 <input type=radio>(스크린리더용, peer) + 토큰 스타일 원 + 라벨을 감싼다. 원은 테두리 두께로 상태를 표현한다: 미선택=1.5px 링, 선택=두꺼운 도넛(medium 6px·small 5px)으로 중앙 구멍이 배경을 비춘다. 라벨 텍스트는 children으로 전달한다.",
+        "[맥락] 같은 그룹의 Radio에는 동일한 name을 준다 — 그러면 브라우저가 한 번에 하나만 선택되도록 그룹으로 묶는다. 하나만 선택해야 하는 폼·옵션·조건 선택에 쓴다.",
+        "[크기·타이포] size로 원과 라벨을 함께 키운다: medium=원 20px·label-large(16), small=원 16px·label-medium(14). fontWeight=strong(bold 700)/base(medium 500)는 라벨 굵기다. 두 축은 독립적이며 4×2×2×2 전 조합이 유효하다.",
+        "[상태] isChecked/isDisabled는 프롭이 아니라 네이티브 checked/defaultChecked/disabled로 지정한다 — 원은 peer-checked/peer-disabled로 반응한다.",
+        "[색상·토큰] 미선택 링=icon/base/secondary, 선택 링=status/icon/selected, 비활성 링=status/icon/disabled-inverseBlack, 라벨=text/base/primary(비활성 status/text/disabled). 모두 토큰 바인딩, 하드코딩 금지.",
+      ],
+    },
+  },
+  {
+    name: "chip",
+    type: "registry:ui",
+    title: "Chip",
+    description:
+      "칩 원자 컴포넌트. Figma [Chip … Item] 심볼에 대응한다. variant(filter·trigger·selection) × size(filter·trigger만 medium·small) × selected(filter·selection만)의 조합만 타입으로 허용한다. filter=pill 토글, trigger=pill+chevron(메뉴 호출), selection=외곽선 사각형 토글. 색은 모두 토큰에 바인딩된다.",
+    dependencies: ["class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      { src: "components/chip.tsx", target: "components/ui/chip.tsx", type: "registry:ui" },
+      { src: "lib/utils.ts", target: "lib/utils.ts", type: "registry:lib" },
+      { src: "index.tsx", target: "components/ui/icons.tsx", type: "registry:lib", pkg: "icons" },
+    ],
+    meta: {
+      ai: [
+        "[구조] Chip은 <button>이다. 라벨은 children으로 전달한다. trigger는 라벨 뒤에 chevron-down(16px) 아이콘이 자동으로 붙는다. 여러 칩은 ChipGroup으로 배치한다.",
+        "[맥락] variant로 유형을 고른다: filter(목록/카드 빠른 필터, pill 토글)·trigger(선택 시 Bottom Sheet·Modal 등 상세 옵션을 여는 진입점)·selection(Bottom Sheet·설정에서 옵션을 고르는 외곽선 칩). filter·selection은 selected로 켜고, trigger는 selected가 없다.",
+        "[크기] size(medium·small)는 filter·trigger의 상하 여백만 바꾼다(medium 40px·small 33px). selection은 단일 크기다.",
+        "[상태] selected는 filter·selection의 토글 상태 프롭이다(aria-pressed로 노출). hover/pressed는 CSS, 비활성은 네이티브 disabled로 처리한다.",
+        "[색상·토큰] selection 미선택 테두리=border/base/low·선택=status/border/selected(글씨 굵기로 강조). filter 미선택=container/base/higher-level1·선택=status/container/selected+text/base/inverseWhite. trigger=container/base/higher-level1. 모두 토큰 바인딩, 하드코딩 금지.",
+      ],
+    },
+  },
+  {
+    name: "chip-group",
+    type: "registry:ui",
+    title: "Chip Group",
+    description:
+      "Chip들을 배치하는 레이아웃 컨테이너. Figma [Chip Group] Filter·Trigger·Selection 세트에 대응한다. wrap(줄바꿈/한 줄 스크롤) 레이아웃과 선택적 라벨(+필수 별표)만 소유하고, 칩의 생김새는 Chip이 소유한다 — ButtonGroup↔Button 관계와 같다. chipCount는 프롭이 아니라 넣는 Chip 자식 수다.",
+    dependencies: ["class-variance-authority", "clsx", "tailwind-merge"],
+    files: [
+      { src: "components/chip-group.tsx", target: "components/ui/chip-group.tsx", type: "registry:ui" },
+      { src: "components/chip.tsx", target: "components/ui/chip.tsx", type: "registry:ui" },
+      { src: "lib/utils.ts", target: "lib/utils.ts", type: "registry:lib" },
+      { src: "index.tsx", target: "components/ui/icons.tsx", type: "registry:lib", pkg: "icons" },
+    ],
+    meta: {
+      ai: [
+        "[구조] ChipGroup은 Chip 자식들을 배치하는 컨테이너다. Chip을 children으로 넣는다. 색·크기는 각 Chip이 정하고 ChipGroup은 레이아웃만 담당한다(ButtonGroup↔Button과 동일).",
+        "[레이아웃] wrap=true면 여러 줄로 줄바꿈(flex-wrap), false(기본)면 한 줄 가로 스크롤이다. Figma isWrap 축에 대응한다.",
+        "[맥락] label을 주면 상단에 라벨 행이 뜨고, required=true면 마젠타 별표(*)가 붙는다 — Selection 그룹의 [Field Text Set] Label에 대응한다.",
+        "[색상·토큰] 라벨=text/base/primary, 필수 별표=text/brand/primary. 간격은 spacing/gap 토큰(칩 사이 8, 라벨↔칩 12). 모두 토큰 바인딩, 하드코딩 금지.",
+      ],
+    },
+  },
+  {
     name: "text-field",
     type: "registry:ui",
     title: "Text Field",

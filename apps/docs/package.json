@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --port 3000",
-    "build": "next build",
+    "build": "node scripts/build-registry.ts && node scripts/build-llms.ts && next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "registry:build": "node scripts/build-registry.ts",
+    "llms:build": "node scripts/build-llms.ts",
     "code-connect:build": "node scripts/build-code-connect.ts"
   },
   "dependencies": {
