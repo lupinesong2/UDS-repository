@@ -1,38 +1,79 @@
 ---
 name: uds-component
-description: Figma 컴포넌트 세트에서 packages/ui의 UDS 컴포넌트를 만들거나 병합하고 레지스트리 항목과 shadcn 형식 문서 페이지(Preview/Code 플레이그라운드)까지 생성한다. figma.com 컴포넌트 URL을 붙여넣어 컴포넌트를 만들/추가/병합하려 할 때(링크만 있어도), 또는 "컴포넌트/버튼 합치자", "Figma 컴포넌트 추가", "registry 등록", "컴포넌트 문서 만들어", "add/merge component" 라고 할 때 트리거.
+description: Figma 컴포넌트 세트 URL 하나로 packages/ui의 UDS React 컴포넌트를 만들거나 병합하고, 레지스트리 항목과 케이스별 정적 예시·Copy Page가 있는 표준 문서 페이지까지 생성한다. figma.com 컴포넌트 URL을 붙여넣어 컴포넌트를 만들/추가/병합하려 할 때(링크만 있어도), 또는 "컴포넌트/버튼 합치자", "Figma 컴포넌트 추가", "registry 등록", "컴포넌트 문서 만들어", "add/merge component" 라고 할 때 트리거.
 ---
 
-# UDS 컴포넌트 작성 (Figma → packages/ui → registry → docs)
+# UDS 컴포넌트 만들기 — Figma에서 코드·문서까지 한 번에
 
-Figma 컴포넌트 세트를 **재현 가능한 방식으로** 코드 컴포넌트로 만든다. 결과물은 항상 다음 5가지다:
+**입력은 Figma 컴포넌트 세트 URL 하나. 출력은 항상 아래 5가지.** 이 스킬은 그 사이를 재현 가능한 방식으로 잇는다.
 
-1. **하나의 `cva` 컴포넌트** (`button.tsx` 구조를 따름)
+---
+
+## 이 스킬이 하는 일 (한눈에)
+
+Figma에 그려진 컴포넌트를, 디자인이 정의한 조합만 정확히 허용하는 **완성도 높은 React 컴포넌트**로 옮기고, 그것을 **눌러보며 이해하는 문서 페이지**로 만들고, **팀이 설치·활용할 수 있게 등록·검증**까지 끝낸다.
+
+세 가지 일을 하지만 **하나의 파이프라인**이다 — 뒷 단계가 앞 단계의 결과(정확한 프롭·토큰·축)를 그대로 참조하므로 분리하지 않는다.
+
+| 단계 | 하는 일 | Phase | 이 단계의 산출물 |
+|---|---|---|---|
+| **Stage A · 코드화** | Figma 세트 → React 컴포넌트 | 1–3 | `packages/ui/…/<name>.tsx` (+토큰) |
+| **Stage B · 문서화** | 코드 → 등록 + 문서(정적 예시) | 4–6 | 레지스트리 항목, 문서 페이지, Copy Page |
+| **Stage C · 통합·검증** | 전체를 타입체크하고 (선택)Figma 연결 | 7–8 | 타입체크 통과, Code Connect |
+
+**최종 산출물 5가지 (항상 이 5개):**
+
+1. **하나의 `cva` 컴포넌트** — `button.tsx` 구조를 따름
 2. **Figma가 정의한 조합만 컴파일되는** 손수 작성한 discriminated union props
 3. 모든 색·간격·폰트를 **Figma 토큰 유틸에 바인딩** (하드코딩 금지)
 4. **레지스트리 항목** + 재빌드된 `r/<name>.json`
-5. **shadcn 형식 문서 페이지** + Preview/Code 플레이그라운드
+5. **표준 문서 페이지** — 케이스별 정적 예시 + Copy Page(LLM 복사)
 
-Phase 순서대로 진행하고 **검증(Phase 7)을 건너뛰지 않는다.**
+> Phase 순서대로 진행하고 **검증(Phase 7)을 건너뛰지 않는다.**
 
 ---
 
-## 호출 & 입력
+## 용어 미니사전 (디자이너를 위해)
+
+이 스킬이 만드는 코드에 나오는 용어. 흐름을 이해하는 데만 참고하면 된다.
+
+| 용어 | 쉬운 설명 |
+|---|---|
+| **cva** | "이 속성이면 이 스타일" 규칙표. Figma의 variant 조합 → CSS 클래스 매핑을 담는 함수. |
+| **discriminated union (props)** | "Figma에 있는 조합만 허용"하는 타입 장치. 없는 조합을 코드로 쓰면 **컴파일 에러**가 난다. |
+| **토큰 유틸** | 색·간격·폰트를 하드코딩(#000 같은) 대신 디자인 토큰 이름(`bg-container-brand-secondary`)으로 쓰는 것. |
+| **registry(레지스트리)** | 이 컴포넌트를 다른 프로젝트가 `npx @uds/cli add` 로 설치할 수 있게 하는 배포 목록. |
+| **Example (정적 예시)** | 케이스마다 실제 컴포넌트 프리뷰 카드 + 그와 일치하는 코드 블록을 나란히 보여주는 것. |
+| **Copy Page** | 페이지를 LLM용 마크다운으로 클립보드에 복사하는 헤더 버튼(llms.txt의 페이지 버전). |
+
+---
+
+## 트리거 & 입력
 
 **필수 입력은 Figma 컴포넌트 세트 URL 하나뿐이다.** `figma.com/design/<fileKey>/...?node-id=<id>` 링크만 붙여넣어도(선택적으로 "만들어줘"/"추가"/"합치자") 이 스킬이 트리거된다. `/uds-component` 입력은 선택.
 
-링크만으로 자율 진행한다:
+**링크만으로 자율 진행한다:**
 
-1. URL에서 node id 추출(`?node-id=1-2` → `1:2` 또는 `1-2`) 후 Phase 1로 세트를 읽는다.
-2. **컴포넌트 이름을 Figma 세트 이름에서 유도** — `[Button] Inline` → `button`, `[Chip] …` → `chip`. 여러 세트가 접두사를 공유하면(Page/Module/Inline) `category` 축을 가진 **하나의 컴포넌트로 병합**한다(`button.tsx` 참고). 이름·category 매핑이 정말 모호할 때만 사용자에게 묻고, 아니면 명백한 매핑을 골라 명시한다.
-3. **신규 vs 병합 결정**: 같은 이름 컴포넌트가 `packages/ui/src/components/`에 있으면 확장/병합, 없으면 신규 생성.
+1. URL에서 node id 추출(`?node-id=1-2` → `1:2` 또는 `1-2`) 후 Stage A로 세트를 읽는다.
+2. **컴포넌트 이름을 Figma 세트 이름에서 유도** — `[Button] Inline` → `button`, `[Chip] …` → `chip`. 여러 세트가 접두사를 공유하면(Page/Module/Inline) `category` 축을 가진 **하나의 컴포넌트로 병합**한다(`button.tsx` 참고).
+3. **신규 vs 병합 결정** — 같은 이름 컴포넌트가 `packages/ui/src/components/`에 있으면 확장/병합, 없으면 신규 생성.
 4. Phase 1–7을 끝까지 실행한 뒤, 생성/수정/삭제된 모든 파일과 타입체크 결과를 보고한다.
 
-각 Phase마다 확인받지 말 것 — **진짜 결정**일 때만 멈춘다(이름 모호, `theme.css`에 없는 토큰, 기존 조합과 모순되는 Figma 조합).
+각 Phase마다 확인받지 말 것 — **아래 "멈춰야 할 때"에 해당할 때만** 멈춘다.
 
 ---
 
-## 0. 레포 맵 (source of truth)
+## ⛔ 멈춰서 사용자에게 물어봐야 할 때 (그 외에는 자율 진행)
+
+| 상황 | 왜 멈추나 |
+|---|---|
+| **이름·category 매핑이 정말 모호** | 잘못 병합하면 되돌리기 어렵다. 명백한 매핑이면 고르고 명시만 하고 진행. |
+| **`theme.css`에 없는 토큰** | 정확값 매핑이 있으면 진행하되, 완전 동일 값이 없고 정확도가 중요하면 사용자 판단 필요. |
+| **기존 조합과 모순되는 Figma 조합** | 기존 컴포넌트의 타입/스타일과 충돌하면 임의로 덮지 않는다. |
+
+---
+
+## 레포 맵 (source of truth)
 
 | 대상 | 경로 |
 |---|---|
@@ -43,16 +84,32 @@ Phase 순서대로 진행하고 **검증(Phase 7)을 건너뛰지 않는다.**
 | 토큰 소스 | `packages/tokens/src/tokens.ts` → `node packages/tokens/scripts/build-css.ts` 로 재생성 |
 | 레지스트리 매니페스트 | `registry/registry.ts` |
 | 레지스트리 빌드 | `apps/docs/scripts/build-registry.ts` → `apps/docs/public/r/<name>.json` + `index.json` 생성 |
+| llms.txt 빌드 | `apps/docs/scripts/build-llms.ts` → `public/llms.txt` + `llms-full.txt` + `components/<name>/llms.txt` (레지스트리에서 생성) |
 | 문서 페이지 | `apps/docs/app/components/<name>/page.tsx` |
-| 문서 플레이그라운드 | `apps/docs/app/components/<name>/<name>-playground.tsx` |
-| 공용 플레이그라운드 | `apps/docs/components/props-playground.tsx` (Preview/Code 탭 카드) |
-| 사이드바 내비 | `apps/docs/app/layout.tsx` (`NAV` 배열) |
+| 공용 문서 primitives | `apps/docs/components/doc.tsx` (`DocHeader`·`Installation`·`H2`·`H3`·`Example`·`PropsTable`) |
+| Copy Page 버튼(공용) | `apps/docs/components/copy-page-button.tsx` |
+| 사이드바/상단 내비·TOC | `apps/docs/components/site-chrome.tsx` (`SIDE`·`TOP` 배열) |
 
 `/.claude/rules/figma-mcp-integration.md`(캔버스 쓰기 규칙)도 준수하되, **이 스킬은 레포 안의 코드**를 다루지 Figma 캔버스에 쓰지 않는다.
 
 ---
 
-## 1. Figma 스펙 추출
+# Stage A · 코드화 (Phase 1–3)
+
+> **목적** — Figma 세트를, 디자인이 정의한 조합만 정확히 허용하는 React 컴포넌트로 옮긴다.
+
+### ✅ 이 단계 완료 기준 (Definition of Done)
+- [ ] category별 허용 `variant × hierarchy` 조합을 Figma 메타데이터에서 기록했다.
+- [ ] 쓰는 모든 색·간격·폰트 유틸이 `theme.css`에서 해석됨을 확인했다 (**하드코딩 hex 0개**).
+- [ ] 컴포넌트가 `button.tsx` 구조를 따르고, **프롭은 손수 작성한 discriminated union** — Figma에 없는 조합은 컴파일 안 됨.
+- [ ] `index.ts` 갱신; 병합으로 사라진 파일·익스포트 삭제.
+
+### 🎯 품질 바
+색은 오직 `compoundVariants`에, 기하/타이포는 크기 축에. 미정의 조합에 **런타임 fallback을 두지 않는다** — 타입으로 막는 게 정답.
+
+---
+
+## Phase 1 · Figma 스펙 추출
 
 `get_design_context` 호출 전에 `figma:figma-implement-design`을 먼저 로드한다(필수). 코어 컴포넌트 라이브러리 파일은 **`spWdVkr7RbwWOyDG6xbY4z`** ("[Test] Core Component v.1.0.0"). node URL/id가 주어지면 이 순서로 호출한다:
 
@@ -63,7 +120,9 @@ Phase 순서대로 진행하고 **검증(Phase 7)을 건너뛰지 않는다.**
 
 조합별로 기록: bg, text color, border(outline), pressed 오버레이(`state/stateLayer/pressed-*`), disabled(container/border/text).
 
-## 2. 모든 토큰 유틸 존재 확인
+**⚠️ 마크가 벡터/SVG 글리프일 때 — 스크린샷으로 모양을 추측하지 말 것 (라디오에서 겪은 실수):** 라디오 점·체크마크·토글 노브처럼 아이콘형 마크는 `get_screenshot`이 **저해상도라 형태를 구분 못 한다**. 반드시 `get_design_context`가 준 `http://localhost:3845/assets/<hash>.svg` 에셋을 **직접 `curl`해서 path 지오메트리(반지름·stroke 두께·구멍 크기)를 읽고** 정확히 재현한다. 실제 사례: 라디오 **선택 상태**는 "바깥 링 + gap + 안쪽 점"(과녁형)이 아니라 **border 두께로 만든 도넛 + 투명 중앙 구멍**이었다 — SVG는 `r=10`(바깥)~`r=4`(구멍) 채운 annulus였고, 그래서 CSS로는 `border-[6px]`(medium)/`border-[5px]`(small) 원으로 재현했다. 비슷한 컴포넌트(Checkbox)의 렌더 패턴을 복사하기 **전에** SVG로 이 컴포넌트의 실제 형태를 먼저 확인한다.
+
+## Phase 2 · 모든 토큰 유틸 존재 확인
 
 색·간격을 절대 하드코딩하지 않는다. 쓰기 전에 각 Tailwind 유틸이 생성된 테마에서 해석되는지 확인:
 
@@ -74,7 +133,7 @@ grep -oE "text-label-(large|medium|small)" "$CSS" | sort -u
 grep -E -- "--color-<token>:" "$CSS"                    # e.g. --color-container-brand-secondary:
 ```
 
-토큰 → 유틸 매핑: `color/container/brand/secondary` → `bg-container-brand-secondary`, `color/text/base/white` → `text-text-base-white`, `color/border/base/higher` → `border-border-base-higher`, `spacing/component/x/12` → `px-component-x-12`, `font/label/medium` → `text-label-medium`, `radius/small` → `rounded-small`, `spacing/gap/4` → `gap-gap-4`, `color/state/stateLayer/pressed-inverseBlack` → `before:bg-state-state-layer-pressed-inverse-black`.
+**토큰 → 유틸 매핑:** `color/container/brand/secondary` → `bg-container-brand-secondary`, `color/text/base/white` → `text-text-base-white`, `color/border/base/higher` → `border-border-base-higher`, `spacing/component/x/12` → `px-component-x-12`, `font/label/medium` → `text-label-medium`, `radius/small` → `rounded-small`, `spacing/gap/4` → `gap-gap-4`, `color/state/stateLayer/pressed-inverseBlack` → `before:bg-state-state-layer-pressed-inverse-black`.
 
 **토큰이 `theme.css`에 없을 때 (결정 지점):** Figma엔 있는데 생성물엔 없는 토큰이면 두 갈래다 —
 - **정확한 값의 다른 토큰으로 매핑**(예: `container/base/high-level1` #f2f2f2 → 동일 값의 `bg-container-base-high`, 포커스 `state/focused` → 레포 관례 `ring-status-border-selected`). 문서 토큰표에 매핑 사실을 명시.
@@ -82,7 +141,7 @@ grep -E -- "--color-<token>:" "$CSS"                    # e.g. --color-container
 
 **tailwind-merge 주의:** 커스텀 스페이싱 스케일(`gap-gap-*` 등)은 twMerge가 **중복 제거하지 못한다** — `className`으로 usage마다 덮어써도 안 이길 수 있다. 값을 바꾸려면 **컴포넌트 소스에서** 바꾼다.
 
-## 3. 컴포넌트 작성 (`packages/ui/src/components/<name>.tsx`)
+## Phase 3 · 컴포넌트 작성 (`packages/ui/src/components/<name>.tsx`)
 
 **구조 — `button.tsx`를 따름:**
 
@@ -122,112 +181,106 @@ export type XProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 **새 레이아웃 컨테이너 (버튼류 아님):** 컨테이너 컴포넌트(예: `Cta` — `onFrameHigh` 배경 축 + 선택적 시스템 UI 슬롯 + `children`인 화면 하단 액션 영역)는 상호작용 요소가 아니므로 버튼 base(포커스 링, state-layer `before:`, `inline-flex`)를 생략. 자신이 소유한 축(예: 배경)만을 위한 **최소 `cva`**를 쓰고, boolean/슬롯은 평범한 프롭으로, 실제 액션은 `children`으로 조합(안에 `ButtonGroup`을 넣음). OS 스펙 기하(예: iOS 홈 인디케이터 5px/134px)는 리터럴로 둬도 되지만 **색은 반드시 토큰에 바인딩**한다.
 
-## 4. 레지스트리 (`registry/registry.ts`) + 재빌드
+---
+
+# Stage B · 문서화 (Phase 4–6)
+
+> **목적** — 만든 컴포넌트를 팀이 설치·활용할 수 있게 등록하고, 눌러보며 이해하는 문서로 만든다.
+
+### ✅ 이 단계 완료 기준
+- [ ] 레지스트리 항목 추가/병합; `meta.ai` 줄에 `[분류]` 접두사; `build-registry.ts` + `build-llms.ts` 재실행; 낡은 JSON 삭제.
+- [ ] 문서 페이지를 **`button/page.tsx` 복제**로 시작; 섹션 순서(Header+Copy Page → Hero정적 → Install → Usage → Examples → Features → API 4열 → Accessibility)·타이포 Button과 동일.
+- [ ] Examples는 **케이스별 정적 `Example`(프리뷰+코드)**; 인터랙티브 플레이그라운드 없음; preview↔code 일치.
+- [ ] API Reference = `Prop·Type·Default·Description` **4열** 표; **별도 "AI 가이드" 섹션 없음**(Copy Page + `meta.ai`가 LLM 채널).
+- [ ] `site-chrome.tsx`의 `SIDE`에 항목 추가; 병합으로 사라진 페이지/디렉터리 삭제.
+
+### 🎯 품질 바
+문서는 **스스로 검증**한다 — 각 `Example`의 `preview`(실제 컴포넌트)와 `code` 문자열이 1:1로 일치하고, 리터럴 프롭 예시는 타입 검사를 통과해야 한다.
+
+---
+
+## Phase 4 · 레지스트리 (`registry/registry.ts`) + 재빌드
 
 `RegistryItem` 하나 추가/병합: `name`, `title`, `description`, `dependencies`(`@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`), `files`(컴포넌트 + `lib/utils.ts`), `meta.ai` 가이드. `meta.ai` 줄은 **Figma 정의 조합만 유효(타입으로 강제)**임을 명시하고 category별로 나열한다. 그다음 재빌드:
 
 ```bash
 node apps/docs/scripts/build-registry.ts   # emits public/r/<name>.json + index.json
+node apps/docs/scripts/build-llms.ts        # emits public/llms.txt + llms-full.txt + components/<name>/llms.txt
 ```
 
 병합으로 사라진 컴포넌트의 `apps/docs/public/r/<removed>.json`은 삭제.
 
-## 5. 문서 페이지 — shadcn 형식
+> `meta.ai`의 `[분류]` 접두사는 그대로 유지한다(AI 파싱용). 이 `meta.ai`가 곧 llms.txt·Copy Page의 본문이 되므로(빌드 스크립트가 생성) 여기서 정확히 쓰면 LLM 문서가 공짜로 완성된다.
 
-`apps/docs/app/components/<name>/page.tsx`. 섹션 순서:
+## Phase 5 · 문서 페이지 (표준 형식)
 
-1. **Header** — kicker `Components`, `h1`(`text-3xl font-bold tracking-tight`), Figma 세트를 언급하는 한 문단 `text-lg` 흐린 설명.
-2. **Hero 플레이그라운드** — 헤더 바로 아래 `<XPlayground />`(preview + props + code 통합 카드). 컨트롤이 Figma 세트 속성을 반영한다는 짧은 캡션 권장.
-3. **Installation** — `### CLI`(`npx @uds/cli add <name>`) + `### Manual · MCP`(`mcpServers` JSON).
-4. **Usage** — `import` 줄 + 최소 `<X …>` 스니펫, `CodeBlock`으로.
-5. **Examples** *(선택)* — hero 플레이그라운드가 이미 모든 Figma variation을 재현하면 생략(대부분 기본). 정적 매트릭스가 플레이그라운드로 못 보여주는 걸 더할 때만 포함하고, category별(`variant × hierarchy`) `Preview` 하나씩 + `### Icon`/`### States`.
-6. **API Reference** — **모든** 프롭 표, 각각 **Origin** 배지 + 범례. 미정의 조합이 컴파일 에러란 주석(구체 예시 하나 명시).
-7. **Design Tokens** — 용도 → Figma 토큰 → 값 표.
-8. **AI 가이드** — **표**(`분류` | `가이드`), `AI_GUIDE: { category, rule }[]` 배열 기반 규칙 한 줄씩(`meta.ai`의 `[분류]` 접두사와 일치). 컴포넌트에 맞는 분류 선택(예: 구조 · 콘텐츠 · 맥락 · 색상·토큰).
+`apps/docs/app/components/<name>/page.tsx`.
 
-### 타이포그래피 (shadcn 문서 스케일)
+**⭐ 기준 템플릿은 오직 하나 — `app/components/button/page.tsx`.** 새 컴포넌트는 **이 페이지를 그대로 복제**해 시작한다. 문서 포맷은 **shadcn 스타일(정적 케이스 예시 + Copy Page)** 을 따른다 — 인터랙티브 플레이그라운드는 **더 이상 쓰지 않는다**. 어느 형제가 더 비슷해 보여도 항상 Button 페이지를 따른다.
 
-shadcn 문서 스케일에 맞추고 헤딩을 키우지 않는다:
+**섹션 순서 (Button 기준):**
 
-- `h1` 페이지 제목 → `text-3xl font-bold tracking-tight`
-- `H2` 섹션 → `mt-12 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0`
-- `H3` 하위 → `mt-8 text-xl font-semibold tracking-tight`
-- lead 설명 → `text-lg text-text-base-tertiary`; 본문/헬퍼 → `text-sm text-text-base-tertiary`
+1. **Header** — kicker `Components`(`text-sm font-medium text-text-brand-primary-high`) + `h1`(`mt-2 scroll-m-20 text-3xl font-semibold tracking-tight`) + 한 문단 설명(`mt-3 text-base text-text-base-tertiary`). 헤더는 `flex items-start justify-between`으로 **오른쪽 상단에 `<CopyPageButton slug="<name>" />`**(생성된 llms.txt를 fetch — 아래 Phase 6).
+2. **Hero preview (정적)** — 헤더 아래 테두리 카드 하나에 대표 인스턴스 몇 개를 정적 배치(`flex flex-wrap items-center justify-center gap-3 rounded-large border bg-container-base-low p-10`). 컨트롤·탭 없음.
+3. **Installation** — 한 줄 설명 문단 + `npx @uds/cli add <name>`(bash `CodeBlock`). **`### CLI`/`### Manual · MCP` 하위 섹션은 두지 않는다** — Installation은 CLI 한 줄만.
+4. **Usage** — `import` 줄 + 최소 `<X …>` 스니펫.
+5. **Examples** — Figma 케이스별로 `H3`(케이스명) + `<Example preview={…} code="…" />`. 대표 조합만 간결하게(전 조합 나열 금지).
+6. **Features** — 불릿 리스트(핵심 특징 5~6개).
+7. **API Reference** — **4열 표**(`Prop` | `Type` | `Default` | `Description`). 인라인 배열 `.map()`. 표 아래 `text-xs text-text-base-tertiary` 주석으로 (a) 미정의 조합 컴파일 에러 예, (b) 상태(checked/disabled 등)는 프롭이 아니라 네이티브·CSS로 처리.
+8. **Accessibility** — 불릿 리스트(시맨틱 요소, `focus-visible`, 네이티브 `disabled`/aria, 아이콘 단독 시 `aria-label` 등).
 
-### Prop Origin (Figma / Code / Both)
+> **Design Tokens 섹션·AI 가이드 섹션은 페이지에 두지 않는다.** 토큰 매핑은 컴포넌트 소스·레지스트리에만 있고, 문서 페이지는 예시·프롭·접근성에 집중한다. LLM 채널은 **Copy Page(생성된 llms.txt)** + 레지스트리 **`meta.ai`** — 둘 다 레지스트리에서 나온 같은 출처다. 셸(`site-chrome.tsx`)이 우측 "On this page" TOC를 H2에서 자동 생성한다.
 
-API Reference의 모든 프롭을 "어디에 사는가"로 분류:
+### 타이포그래피 (Button 실측값 — 헤딩 키우지 말 것)
 
-- **Figma** — Figma 세트 속성일 뿐, 코드에선 children/다른 프롭으로 표현(예: `contentType`, `context`/set).
-- **Code** — Figma 대응 없는 코드 전용(`children`, `className`, `…HTMLAttributes`).
-- **Both** — Figma·코드 공용 실제 프롭(예: `direction`).
+- `h1` → `mt-2 scroll-m-20 text-3xl font-semibold tracking-tight`
+- `H2` 헬퍼 → `mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0`
+- `H3` 헬퍼 → `mt-8 text-base font-semibold tracking-tight`
+- lead → `text-base text-text-base-tertiary`; 본문 → `text-sm`; 표 주석 → `text-xs`
 
-border+text가 `currentColor`를 공유하는 outline 칩으로 렌더:
+공용 primitives를 `components/doc.tsx`에서 import한다(페이지에서 재선언 금지): `DocHeader`(헤더+Copy Page), `Installation`(CLI 설치), `H2`·`H3`, `Example`(프리뷰+코드), `PropsTable`(4열). 페이지에는 `PROPS` 배열(`[string,string,string,ReactNode][]`)과 컴포넌트별 hero·Examples·Features·Accessibility만 남는다. 엄격 union 프롭이 필요하면 행 객체를 `as XProps` 캐스트.
 
-```tsx
-function OriginBadge({ origin }: { origin: "figma" | "code" | "both" }) {
-  const map = {
-    figma: { label: "Figma", cls: "text-text-brand-primary-high" },
-    code: { label: "Code", cls: "text-text-base-tertiary" },
-    both: { label: "Both", cls: "text-text-base-primary" },
-  } as const;
-  const { label, cls } = map[origin];
-  return (
-    <span className={`inline-flex items-center rounded-full border border-current px-2 py-0.5 text-[10px] font-medium ${cls}`}>
-      {label}
-    </span>
-  );
-}
-```
+**사이드바 등록:** `apps/docs/components/site-chrome.tsx`의 `SIDE` 배열에서 알맞은 카테고리(Action·Selection·Input·Navigation 등)에 항목을 추가한다. 사라진 항목·`app/components/<removed>/` 디렉터리 삭제.
 
-프롭은 **Figma 속성 순서**로 나열(Figma variant 이름 순서, 예: `direction` 다음 `contentType`) 후 Code 전용.
+## Phase 6 · Example 헬퍼 & Copy Page 버튼
 
-재사용할 로컬 헬퍼: `H2`, `H3`, `OriginBadge`, `GuideGroup`, 그리고 `Preview`(Examples 포함 시만). 프롭이 엄격한 union이라 **데이터 기반** `.map()` 안의 `<X>`는 캐스트 헬퍼가 필요:
+인터랙티브 플레이그라운드는 쓰지 않는다. 대신 **케이스별 정적 예시** + **Copy Page**.
 
-```ts
-function demo(category: string, variant?: string, hierarchy?: string): XProps {
-  return { category, variant, hierarchy } as XProps;   // static tables are known-valid
-}
-```
+**Example (공용 `doc.tsx`):** `<Example preview={…} code="…" />` — 프리뷰 카드 + 그와 정확히 일치하는 소스. 페이지에서 재선언하지 않고 import해서 쓴다.
 
-리터럴 프롭 사용(`<X category="inline" variant="ghost" hierarchy="primary" />`)은 완전 타입 검사되게 캐스트 없이 둔다(문서가 스스로 검증).
+- `preview`는 **실제 컴포넌트 인스턴스**(엄격 union이면 `as XProps` 캐스트), `code`는 그와 **1:1로 일치하는** 소스 문자열.
+- Figma 케이스명을 `H3`로 얹고 **대표 조합만** 보여준다(전 조합 나열 금지 — 그건 API 표가 담당).
 
-`apps/docs/app/layout.tsx`의 `NAV`에 컴포넌트 추가. 병합으로 사라진 내비 항목과 `app/components/<removed>/` 디렉터리 삭제.
+**Copy Page = llms.txt (단일 출처):** 페이지에 손으로 `LLM_DOC`을 쓰지 않는다. 대신 `apps/docs/scripts/build-llms.ts`가 **레지스트리(`title`·`description`·`meta.ai`)에서** llms.txt 3종을 생성한다:
 
-## 6. 플레이그라운드 (`<name>-playground.tsx`)
+| 파일 | 용도 |
+|---|---|
+| `public/llms.txt` | 인덱스(컴포넌트 목록 + 링크) |
+| `public/llms-full.txt` | 전체 문서 이어붙임 |
+| `public/components/<name>/llms.txt` | 컴포넌트 1개 (Copy Page가 fetch) |
 
-`"use client"`. 컨트롤 패널은 **Figma 세트 속성을 반영**해야 함 — Figma 속성마다 `select` 하나(여러 세트를 병합한 컴포넌트면 `context`/set select 추가), **Figma 속성 순서**로 — 사용자가 Figma가 정의한 모든 variation을(그리고 *그것만*) 재현할 수 있게.
+공용 버튼은 `<CopyPageButton slug="<name>" />` 하나만 넘긴다 — 클릭 시 `/components/<name>/llms.txt`를 fetch해 클립보드로 복사한다. 즉 **문서 페이지·Copy Page·llms.txt·`meta.ai`가 전부 같은 출처**라 드리프트가 없다.
 
-**Controls (`controls: Control[]`)**
+- 컴포넌트를 추가/수정하면 **`node apps/docs/scripts/build-llms.ts`를 재실행**(레지스트리 빌드와 함께). `pnpm build`에도 체이닝돼 있다.
+- llms.txt 품질은 곧 `meta.ai` 품질이다 — `meta.ai`를 잘 쓰면 llms.txt·Copy Page가 공짜로 채워진다.
 
-- 컨트롤 순서를 Figma에 맞춤(예: `context` → `direction` → `contentType`).
-- **의존 드롭다운:** select의 `options`가 현재 state의 함수일 수 있음 — `options: (s) => string[]` — 상위 선택이 정의한 것만 하위 메뉴에 뜨게. 불가능한 조합은 절대 선택 불가(예: `Dialog · filled+outline`, `filled+ghost · row`). `PropsPlayground`가 변경 후 state를 순서대로(선언 순) cascade 정규화하므로 구동 축을 먼저 둔다.
+---
 
-```tsx
-const controls: Control[] = [
-  { name: "context", type: "select", options: ["CTA", "Bottom Sheet", "Dialog", "Card"], default: "CTA" },
-  { name: "direction", type: "select", options: ["row", "column"], default: "row" },
-  { name: "contentType", type: "select",
-    options: (s) => CONTENT_BY_CONTEXT[s.context as Ctx].filter((ct) => ORIENTATION[ct] === s.direction),
-    default: "filled+filled" },
-];
-```
+# Stage C · 통합·검증 (Phase 7–8)
 
-**Preview** — `render`가 실제 컴포넌트를 만든다. 조합 컴포넌트는 (Figma) 선택을 실제 자식 구성으로 매핑; 단일 컴포넌트는 느슨한 bag을 엄격한 프롭으로 캐스트해 spread:
+> **목적** — 만든 코드·문서가 실제로 컴파일되는지 증명하고, (선택) Figma Dev Mode에서 코드가 보이게 연결한다.
 
-```tsx
-render={(props) => {
-  const p = { category: props.category, variant: props.variant,
-    hierarchy: props.hierarchy, disabled: props.disabled as boolean } as XProps;
-  return <X {...p}>{String(props.children)}</X>;
-}}
-```
+### ✅ 이 단계 완료 기준
+- [ ] `packages/ui` + `apps/docs` 타입체크 통과.
+- [ ] 네거티브 타입 테스트 통과(잘못된 조합이 실제로 에러남을 증명) 후 임시 파일 삭제.
+- [ ] (선택) Code Connect 연결 시 `uds-code-connect` 스킬 사용.
 
-**Code** — Code 탭은 일반 prop bag이 아니라 **실제 소스 구조**를 반영해야 함. 개발자가 실제로 쓸 것을 그대로 내보내는 `code: (state) => string` override 전달(조합 컴포넌트는 `<Wrapper>` + children 트리). `render`와 `code`를 같은 매핑에서 구동해 어긋나지 않게.
+### 🎯 품질 바
+"컴파일된다"가 아니라 **"잘못된 조합은 컴파일 안 된다"까지 증명**한다. 이게 이 스킬의 핵심 약속이다.
 
-공용 `PropsPlayground`는 **Preview / Code** 탭바가 있는 테두리 카드 하나를 렌더: Preview = 라이브 컴포넌트(좌) + 프롭 컨트롤(우); Code = `code(state)` 출력(override 없으면 일반 생성기) + 복사 버튼. 페이지마다 fork하지 말고 **가산적으로만** 확장. 안정 API는 `componentName`, `controls`(정적 **또는** `(state) => string[]` options), `childrenProp`, `render`, 선택적 `code` override.
+---
 
-## 7. 검증 (필수)
+## Phase 7 · 검증 (필수)
 
 `pnpm typecheck`가 정석이나 **corepack pnpm은 Node ≥ 25에서 크래시**(`ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING`). 대안 — 워크스페이스 TS 컴파일러를 직접 실행(버전 무관하게 `find`로 해석):
 
@@ -251,24 +304,29 @@ node "$TSC" --noEmit -p apps/docs/tsconfig.json && echo docs-ok
 
 의도적으로 잘못된 줄마다 `TS2322 … is not assignable`, 정상 줄엔 에러 없음. 임시 파일 삭제.
 
-## 8. (선택) Code Connect
+## Phase 8 · (선택) Code Connect
 
 새 컴포넌트의 Figma 세트를 코드에 연결해 Dev Mode가 스니펫 + GitHub 소스를 보이게 하려면 **`uds-code-connect`** 스킬을 쓴다 — v2 템플릿 워크플로(`*.figma.ts`), 토큰 위생, 퍼블리시, 문서 상태 페이지를 모두 다룬다. 요약: 세트 node마다 `*.figma.ts` 템플릿 하나(`@uds/ui`에서 import, glyph 접두사 포함 정확한 Figma 프롭명 매핑, 조합은 `figma.children("*")`), 그다음 `pnpm figma:check` → `pnpm figma:publish -- --force`.
 
 ---
 
-## 체크리스트
+## 최종 체크리스트 (제출 전 전체 점검)
 
+**Stage A · 코드화**
 - [ ] Figma 메타데이터 읽음; category별 허용 `variant × hierarchy` 기록.
-- [ ] 모든 색·간격·폰트 유틸을 `packages/tokens/dist/theme.css`에서 확인(없으면 정확값 매핑 또는 토큰 재생성).
+- [ ] 모든 색·간격·폰트 유틸을 `theme.css`에서 확인(없으면 정확값 매핑 또는 토큰 재생성).
 - [ ] 컴포넌트: 기하는 size 축, 색은 compoundVariants, 모든 토큰 바인딩(하드코딩 hex 없음).
 - [ ] 프롭은 손수 작성한 discriminated union — 잘못된 조합 컴파일 안 됨; 런타임 fallback 없음.
 - [ ] `index.ts` 갱신; 병합으로 사라진 파일/익스포트 삭제.
-- [ ] 레지스트리 항목 추가/병합; `meta.ai` 줄에 `[분류]` 접두사; `build-registry.ts` 재실행; 낡은 JSON 삭제.
-- [ ] 문서 페이지가 섹션 순서대로(Examples 선택); shadcn 타이포(h1 `text-3xl`, H3 `text-xl`); hero 플레이그라운드; `demo()` 캐스트는 `.map()`에서만.
-- [ ] 플레이그라운드 컨트롤이 Figma 프롭을 Figma 순서로 반영; 의존 드롭다운이 불가능 조합 숨김; Code 탭이 실제 소스 구조 반영하는 `code` override 사용.
-- [ ] API Reference에 모든 프롭 + Figma/Code/Both Origin 배지 + 범례.
-- [ ] AI 가이드가 `분류 | 가이드` 표로 렌더(`meta.ai` 분류와 일치).
+
+**Stage B · 문서화**
+- [ ] 레지스트리 항목 추가/병합; `meta.ai` 줄에 `[분류]` 접두사; `build-registry.ts` + `build-llms.ts` 재실행; 낡은 JSON 삭제.
+- [ ] 문서 페이지를 `button/page.tsx` 복제로 시작; 섹션 순서·타이포 Button 동일; Header 우상단 **`<CopyPageButton slug="<name>" />`**.
+- [ ] Examples = 케이스별 정적 `Example`(프리뷰+코드), 인터랙티브 플레이그라운드 없음; preview↔code 일치.
+- [ ] API Reference = `Prop·Type·Default·Description` **4열** 표 + 표 아래 주석; **Features·Accessibility** 섹션 존재.
+- [ ] `build-llms.ts` 재실행 → `/components/<name>/llms.txt` 생성 확인; `<CopyPageButton slug>`가 그걸 fetch; 별도 "AI 가이드" 섹션 없음.
 - [ ] doc-only 병합 시: 무의미한 프롭 미추가; docstring + 레지스트리 + 문서가 새 세트를 커버.
 - [ ] `NAV` 갱신; 삭제된 페이지/디렉터리 제거.
+
+**Stage C · 통합·검증**
 - [ ] `packages/ui` + `apps/docs` 타입체크 통과; 네거티브 타입 테스트 통과; 임시 파일 삭제.
