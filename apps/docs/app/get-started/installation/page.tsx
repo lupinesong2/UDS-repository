@@ -18,12 +18,14 @@ export default function InstallationPage() {
   return (
     <article className="max-w-3xl">
       <header>
-        <p className="text-sm font-medium text-text-brand-primary-high">Get Started</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">Installation</h1>
-        <p className="mt-3 text-base text-text-base-tertiary">
-          이 셋업은 <strong>워크플로우 02 — AI로 앱 코드 생성</strong>(과 직접 사용)을 위한 것입니다. AI
-          툴에 MCP를 연결하고, 프로젝트에 토큰 테마를 한 번 깔면 됩니다. 워크플로우 01(AI로 Figma 화면
-          생성, UDS-Gen)은 앱 설치가 필요 없고 Figma MCP만 있으면 됩니다.
+        <p className="pl-0.5 text-xs font-medium text-text-base-tertiary">Get Started</p>
+        <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">Installation</h1>
+        <p className="mt-3 text-sm text-text-base-tertiary">
+          한 번만 설정하면 됩니다 — AI 툴에 MCP를 연결하고, 프로젝트에 토큰 테마를 깝니다. 설정을 마쳤으면{" "}
+          <Link className="underline" href="/get-started/tutorial">
+            튜토리얼
+          </Link>
+          에서 실제로 화면을 만들어 보세요.
         </p>
       </header>
 
