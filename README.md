@@ -3,6 +3,31 @@
 Figma 디자인 자산을 **코드 자산 + 배포 가능한 컴포넌트 레지스트리**로 만드는 모노레포입니다.
 목표는 회사 여러 서비스의 품질을 디자인시스템 중심으로 상향시키는 것입니다.
 
+## 빠른 사용 — Claude로 화면 만들기 (튜토리얼)
+
+UDS 컴포넌트로 화면을 AI에게 만들게 하는 가장 짧은 길. 핵심은 Claude가 이 레포의 **실제 코드**(컴포넌트·예시)를 읽게 하는 것 — 그래야 자의적으로 그리지 않습니다.
+
+```bash
+git clone https://github.com/lupinesong2/UDS-repository
+cd UDS-repository && pnpm install
+```
+
+**방법 A — Claude Code로 열고 요청 (MCP 불필요, 가장 간단)**
+
+> 이 레포의 `packages/ui/src` 컴포넌트로 로그인 화면을 만들어줘.
+> `apps/docs/app/examples/address` 예시의 조립 방식을 그대로 따라 하고,
+> `@uds/ui` 컴포넌트만 쓰고 새로 만들지 마.
+
+**방법 B — MCP 등록 (정밀·반복용)**
+
+```bash
+claude mcp add uds -- node "$(pwd)/packages/mcp/src/server.ts"
+```
+> UDS로 로그인 화면 만들어줘. `get_screen_guide`로 규칙 읽고,
+> `get_example`로 비슷한 예시를 참고해서 `@uds/ui`로만 조립해.
+
+**실행(스타일까지)**: 붙여넣을 앱에 Tailwind v4 + `@import "@uds/tokens/theme.css"`가 있어야 색이 나옵니다. 컴포넌트 설치는 `npx @uds/cli add <name>`. 자세한 튜토리얼은 문서 사이트 **Get Started → 튜토리얼**(`/get-started/tutorial`).
+
 ## 아키텍처
 
 ```
@@ -57,12 +82,14 @@ npx @uds/cli list                 # 사용 가능한 컴포넌트 목록
 ```json
 { "mcpServers": { "uds": { "command": "npx", "args": ["-y", "@uds/mcp"] } } }
 ```
-MCP 도구: `list_components`, `get_component`(소스+의존성+AI가이드), `get_design_tokens`.
-`$UDS_REGISTRY`로 레지스트리 위치(URL/경로) 지정 가능.
+MCP 도구: `list_components`, `get_component`(소스+의존성+AI가이드), `get_design_tokens`,
+`get_screen_guide`(규칙·조립 레시피), `list_examples`/`get_example`(실제 예시 화면 소스 — AI가 흉내낼 참조).
+`$UDS_REGISTRY`로 레지스트리 위치(URL/경로) 지정 가능. LLM용 텍스트도 빌드로 생성됨:
+`/llms.txt` · `/llms-full.txt` · `/ai-kit.txt`(규칙+카탈로그+레시피) · `/uds-rules.md`.
 
 ## 로드맵
 
-- **0단계 (완료)**: 토큰→컴포넌트→문서→레지스트리 루프 확립. 현재 Button · ButtonGroup · CTA · Checkbox · TextField · Header + 아이콘 라이브러리 보유
+- **0단계 (완료)**: 토큰→컴포넌트→문서→레지스트리 루프 확립. 현재 Button · ButtonGroup · CTA · Checkbox · Radio · Chip · ChipGroup · TextField · Header + 아이콘 라이브러리 보유
 - **1단계 (진행)**: Figma 토큰 동기화, `/uds-component`로 컴포넌트 확장, 레지스트리 배포 라이브 → *개발 효율/품질 확보*
 - **2단계 (진행)**: Figma Code Connect로 디자인-코드 연결 (현재 18/18 매핑 라이브), 기획/디자이너 핸드오프 워크플로우
 - **3단계**: 여러 서비스 롤아웃 + 거버넌스
