@@ -26,7 +26,7 @@ claude mcp add uds -- node "$(pwd)/packages/mcp/src/server.ts"
 > UDS로 로그인 화면 만들어줘. `get_screen_guide`로 규칙 읽고,
 > `get_example`로 비슷한 예시를 참고해서 `@uds/ui`로만 조립해.
 
-**실행(스타일까지)**: 붙여넣을 앱에 Tailwind v4 + `@import "@uds/tokens/theme.css"`가 있어야 색이 나옵니다. 컴포넌트 설치는 `npx @uds/cli add <name>`. 자세한 튜토리얼은 문서 사이트 **Get Started → 튜토리얼**(`/get-started/tutorial`).
+**실행(스타일까지)**: 붙여넣을 앱에 Tailwind v4 + `@import "@uds/tokens/theme.css"`가 있어야 색이 나옵니다. 컴포넌트 설치는 `npx @uds/cli add <name>`. 자세한 시나리오는 문서 사이트 **Get Started → 화면 만들기**(`/get-started/build`).
 
 ## 아키텍처
 

@@ -22,10 +22,10 @@ export default function InstallationPage() {
         <h1 className="mt-2 scroll-m-20 text-3xl font-bold tracking-tight">Installation</h1>
         <p className="mt-3 text-sm text-text-base-tertiary">
           한 번만 설정하면 됩니다 — AI 툴에 MCP를 연결하고, 프로젝트에 토큰 테마를 깝니다. 설정을 마쳤으면{" "}
-          <Link className="underline" href="/get-started/tutorial">
-            튜토리얼
+          <Link className="underline" href="/get-started/build">
+            화면 만들기
           </Link>
-          에서 실제로 화면을 만들어 보세요.
+          에서 AI로 화면을 뽑아 보세요.
         </p>
       </header>
 
@@ -72,10 +72,10 @@ export default function InstallationPage() {
 
       <H2>다음</H2>
       <p className="mt-3 text-sm text-text-base-tertiary">
-        <Link className="underline" href="/get-started/quickstart">
-          Quickstart
+        <Link className="underline" href="/get-started/build">
+          화면 만들기
         </Link>
-        에서 세 가지 AI 워크플로우를 실제로 실행해 보세요.
+        에서 AI에게 명령해 UDS 컴포넌트로 화면을 뽑아 보세요.
       </p>
     </article>
   );
