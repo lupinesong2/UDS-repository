@@ -57,9 +57,8 @@ export default function IntroductionPage() {
           AI 툴에 MCP를 연결하고, 프로젝트에 토큰 테마를 한 번 설정합니다. (필요 시 CLI로 컴포넌트 소스도
           가져옵니다.)
         </StartCard>
-        <StartCard href="/get-started/tutorial" step="실행" title="Claude로 화면 만들기">
-          레포를 clone하고 Claude에게 요청하면 UDS 컴포넌트로 화면을 조립합니다. clone → 프롬프트 →
-          렌더까지 스텝으로.
+        <StartCard href="/get-started/build" step="실행" title="화면 만들기">
+          AI에게 요청하면 UDS 컴포넌트로 화면을 조립합니다. 프롬프트 → 실행까지 스텝으로.
         </StartCard>
       </div>
     </article>
