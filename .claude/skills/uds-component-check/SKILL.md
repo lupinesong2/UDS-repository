@@ -1,6 +1,6 @@
 ---
 name: uds-component-check
-description: UDS 디자인 시스템 컴포넌트를 접근성·정보구조 관점에서 점검하거나, 규칙에 맞춰 새로 생성한다. Button, ButtonGroup, CTA, Checkbox, TextField, Header 패턴별 명세와 체크리스트를 제공한다. 사용자가 컴포넌트를 "점검", "검사", "리뷰", "체크"해달라고 하거나, UDS 컴포넌트를 새로 만들거나 수정할 때 반드시 사용한다. .tsx 컴포넌트 파일을 보여주면서 품질·구조·접근성을 묻는 경우, Figma에서 코드로 옮긴 컴포넌트를 검토하는 경우, aria/시맨틱/디자인토큰 준수 여부를 확인하는 경우에도 사용한다. "이 컴포넌트 어때?", "코드 좀 봐줘" 같은 간접적인 요청도 UDS 컴포넌트 파일이 대상이면 이 스킬을 쓴다.
+description: UDS 디자인 시스템 컴포넌트를 접근성·정보구조 관점에서 점검하거나, 규칙에 맞춰 새로 생성한다. Button, ButtonGroup, CTA, Checkbox, Radio, Chip, ChipGroup, TextField, Header 패턴별 명세와 체크리스트를 제공한다. 사용자가 컴포넌트를 "점검", "검사", "리뷰", "체크"해달라고 하거나, UDS 컴포넌트를 새로 만들거나 수정할 때 반드시 사용한다. .tsx 컴포넌트 파일을 보여주면서 품질·구조·접근성을 묻는 경우, Figma에서 코드로 옮긴 컴포넌트를 검토하는 경우, aria/시맨틱/디자인토큰 준수 여부를 확인하는 경우에도 사용한다. "이 컴포넌트 어때?", "코드 좀 봐줘" 같은 간접적인 요청도 UDS 컴포넌트 파일이 대상이면 이 스킬을 쓴다.
 ---
 
 # UDS 컴포넌트 점검
@@ -42,6 +42,9 @@ Figma는 위치와 모양만 표현한다. "이 라벨이 저 입력의 이름�
 | ButtonGroup | `patterns/button-group.md` |
 | CTA | `patterns/cta.md` |
 | Checkbox | `patterns/checkbox.md` |
+| Radio | `patterns/radio.md` |
+| Chip | `patterns/chip.md` |
+| ChipGroup | `patterns/chip-group.md` |
 | TextField | `patterns/text-field.md` |
 | Header | `patterns/header.md` |
 
