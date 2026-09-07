@@ -326,7 +326,7 @@ node "$TSC" --noEmit -p apps/docs/tsconfig.json && echo docs-ok
 - [ ] API Reference = `Prop·Type·Default·Description` **4열** 표 + 표 아래 주석; **Features·Accessibility** 섹션 존재.
 - [ ] `build-llms.ts` 재실행 → `/components/<name>/llms.txt` 생성 확인; `<CopyPageButton slug>`가 그걸 fetch; 별도 "AI 가이드" 섹션 없음.
 - [ ] doc-only 병합 시: 무의미한 프롭 미추가; docstring + 레지스트리 + 문서가 새 세트를 커버.
-- [ ] `NAV` 갱신; 삭제된 페이지/디렉터리 제거.
+- [ ] `site-chrome.tsx`의 `SIDE`에 항목 추가; 삭제된 페이지/디렉터리 제거.
 
 **Stage C · 통합·검증**
 - [ ] `packages/ui` + `apps/docs` 타입체크 통과; 네거티브 타입 테스트 통과; 임시 파일 삭제.
