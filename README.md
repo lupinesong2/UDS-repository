@@ -11,6 +11,7 @@ uds/
 │   ├── tokens/     @uds/tokens  — 디자인 토큰 단일 소스 (Figma 변수와 동기화)
 │   │                             → dist/theme.css (CSS 변수 + Tailwind v4 @theme)
 │   ├── ui/         @uds/ui      — React 컴포넌트 (Tailwind + CVA variants)
+│   ├── icons/      @uds/icons   — currentColor 기반 24×24 SVG 아이콘 라이브러리
 │   ├── cli/        @uds/cli     — 자체 설치 CLI (`uds add <component>`)
 │   └── mcp/        @uds/mcp     — MCP 서버 (AI 툴에 컴포넌트·토큰 노출)
 ├── registry/       레지스트리 매니페스트 (배포 대상 정의)
@@ -61,12 +62,14 @@ MCP 도구: `list_components`, `get_component`(소스+의존성+AI가이드), `g
 
 ## 로드맵
 
-- **0단계 (완료)**: Button 파일럿으로 토큰→컴포넌트→문서→레지스트리 루프 증명
-- **1단계**: Figma 실제 토큰 동기화, `/figma-implement-design`로 컴포넌트 확장, 레지스트리 배포 라이브 → *개발 효율/품질 확보*
-- **2단계**: Figma Code Connect로 디자인-코드 연결, 기획/디자이너 핸드오프 워크플로우
+- **0단계 (완료)**: 토큰→컴포넌트→문서→레지스트리 루프 확립. 현재 Button · ButtonGroup · CTA · Checkbox · TextField · Header + 아이콘 라이브러리 보유
+- **1단계 (진행)**: Figma 토큰 동기화, `/uds-component`로 컴포넌트 확장, 레지스트리 배포 라이브 → *개발 효율/품질 확보*
+- **2단계 (진행)**: Figma Code Connect로 디자인-코드 연결 (현재 18/18 매핑 라이브), 기획/디자이너 핸드오프 워크플로우
 - **3단계**: 여러 서비스 롤아웃 + 거버넌스
 
-## 새 컴포넌트 추가 (1단계 워크플로우)
+## 새 컴포넌트 추가
+
+Figma 컴포넌트 세트 URL 하나를 **`/uds-component` 스킬**에 주면 아래 단계를 재현 가능한 규칙대로 자동 수행합니다(수동 절차이기도 함). 연결·감사용 스킬도 함께 있습니다 — **`/uds-code-connect`**(Dev Mode 매핑 `*.figma.ts`), **`/uds-component-check`**(Figma가 표현 못 하는 관계·접근성 감사).
 
 1. `packages/ui/src/components/<name>.tsx` 작성 (토큰 유틸만 사용, 하드코딩 색상 금지)
 2. `packages/ui/src/index.ts`에 export 추가

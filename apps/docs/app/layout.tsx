@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Figma design assets, codified as a distributable component registry.",
 };
 
+const GETSTARTED = [
+  { href: "/get-started", label: "Introduction" },
+  { href: "/get-started/installation", label: "Installation" },
+  { href: "/get-started/quickstart", label: "Quickstart" },
+];
+
 const NAV = [
   { href: "/components/button", label: "Button" },
   { href: "/components/button-group", label: "Button Group" },
@@ -35,6 +41,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <p className="mt-1 text-xs text-text-base-tertiary">Unified Design System</p>
             <nav className="mt-8 flex flex-col gap-1">
               <span className="px-2 text-xs font-medium uppercase tracking-wider text-text-base-tertiary">
+                Get Started
+              </span>
+              {GETSTARTED.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-medium px-2 py-1.5 text-sm text-text-base-secondary hover:bg-container-base-high hover:text-text-base-primary"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <span className="mt-4 px-2 text-xs font-medium uppercase tracking-wider text-text-base-tertiary">
                 Foundations
               </span>
               <Link
