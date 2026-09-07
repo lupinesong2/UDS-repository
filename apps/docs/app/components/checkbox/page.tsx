@@ -1,295 +1,100 @@
 import type { ReactNode } from "react";
+import { Checkbox } from "@uds/ui";
 import { CodeBlock } from "../../../components/code-block.tsx";
-import { CheckboxPlayground } from "./checkbox-playground.tsx";
+import { DocHeader, Installation, H2, H3, Example, PropsTable } from "../../../components/doc.tsx";
 
 export const metadata = { title: "Checkbox — UDS" };
 
-const TOKENS = [
-  ["미선택 테두리", "color/icon/base/secondary", "#747474"],
-  ["선택 채움/테두리", "color/status/icon/selected", "#1a1a1a"],
-  ["비활성 박스", "color/status/icon/disabled-inverseBlack", "#1a1a1a29"],
-  ["체크마크", "color/icon/base/inverseWhite", "#ffffff"],
-  ["라벨 색", "color/text/base/primary", "#1a1a1a"],
-  ["라벨 · 비활성", "color/status/text/disabled", "#1a1a1a29"],
-  ["라벨 타이포 · medium", "font/label/large", "16"],
-  ["라벨 타이포 · small", "font/label/medium", "14"],
-  ["라벨 굵기 · strong / base", "fontWeight-strong / base", "700 / 500"],
-  ["박스↔라벨 간격", "spacing/gap/6", "6px"],
-  ["상하 여백 · medium / small", "spacing/component/y/8 · y/10", "8px / 10px"],
-  ["박스 모서리", "radius/small", "4px"],
-] as const;
-
-type Origin = "figma" | "code" | "both";
-
-const PROPS: { prop: string; type: string; def: string; origin: Origin; desc: ReactNode }[] = [
-  {
-    prop: "size",
-    type: '"medium" | "small"',
-    def: '"medium"',
-    origin: "both",
-    desc: <>박스+라벨 크기. medium=24px·label-large, small=20px·label-medium.</>,
-  },
-  {
-    prop: "fontWeight",
-    type: '"strong" | "base"',
-    def: '"strong"',
-    origin: "both",
-    desc: <>라벨 굵기. strong=bold(700), base=medium(500).</>,
-  },
-  {
-    prop: "checked / defaultChecked",
-    type: "boolean",
-    def: "—",
-    origin: "both",
-    desc: (
-      <>
-        Figma <code>isChecked</code>. 네이티브 속성 — 제어형은 <code>checked</code>+
-        <code>onChange</code>, 비제어형은 <code>defaultChecked</code>.
-      </>
-    ),
-  },
-  {
-    prop: "disabled",
-    type: "boolean",
-    def: "false",
-    origin: "both",
-    desc: <>Figma <code>isDisabled</code>. 네이티브 <code>disabled</code> 속성.</>,
-  },
-  {
-    prop: "children",
-    type: "ReactNode",
-    def: "—",
-    origin: "both",
-    desc: <>라벨 텍스트 (Figma <code>text</code>).</>,
-  },
-  {
-    prop: "className",
-    type: "string",
-    def: "—",
-    origin: "code",
-    desc: <>추가 유틸리티 클래스(cn 병합).</>,
-  },
-  {
-    prop: "…InputHTMLAttributes",
-    type: "React.InputHTMLAttributes<HTMLInputElement>",
-    def: "—",
-    origin: "code",
-    desc: (
-      <>
-        <code>onChange</code>, <code>name</code>, <code>value</code>, <code>required</code> 등
-        표준 input 속성 (단 <code>size</code>는 제외 — 스타일 축이 우선).
-      </>
-    ),
-  },
+// Prop reference — Prop · Type · Default · Description (shadcn-style 4-col).
+const PROPS: [string, string, string, ReactNode][] = [
+  ["size", "medium | small", "medium", "박스+라벨 스케일. medium=24px·label-large(16), small=20px·label-medium(14)."],
+  ["fontWeight", "strong | base", "strong", "라벨 굵기. strong=bold(700), base=medium(500). size와 독립적인 축."],
+  ["checked / defaultChecked", "boolean", "—", "선택 상태 — 네이티브 input 속성(제어/비제어)."],
+  ["disabled", "boolean", "false", "네이티브 비활성 — 상호작용 차단 + 흐린 스타일."],
+  ["children", "ReactNode", "—", "라벨 텍스트 슬롯."],
 ];
-
-const AI_GUIDE: { category: string; rule: ReactNode }[] = [
-  {
-    category: "구조",
-    rule: (
-      <>
-        <code>Checkbox</code>는 <code>&lt;label&gt;</code>이 네이티브{" "}
-        <code>&lt;input type=&quot;checkbox&quot;&gt;</code>(스크린리더용, peer) + 토큰 박스 +
-        라벨을 감쌉니다. 라벨은 <code>children</code>으로 전달합니다.
-      </>
-    ),
-  },
-  {
-    category: "크기·타이포",
-    rule: (
-      <>
-        <code>size</code>가 박스와 라벨을 함께 키웁니다 — medium=24px·label-large(16),
-        small=20px·label-medium(14). <code>fontWeight</code>=strong(700)/base(500)는 라벨 굵기.
-        두 축은 독립적이며 전 조합이 유효합니다.
-      </>
-    ),
-  },
-  {
-    category: "상태",
-    rule: (
-      <>
-        <code>isChecked</code>/<code>isDisabled</code>는 프롭이 아니라 네이티브{" "}
-        <code>checked</code>/<code>defaultChecked</code>/<code>disabled</code>로 지정합니다 — 박스는{" "}
-        <code>peer-checked</code>/<code>peer-disabled</code>로 반응합니다.
-      </>
-    ),
-  },
-  {
-    category: "색상·토큰",
-    rule: (
-      <>
-        미선택 테두리=<code>icon/base/secondary</code>, 선택 채움=<code>status/icon/selected</code>,
-        비활성=<code>status/icon/disabled-inverseBlack</code>, 체크마크=
-        <code>icon/base/inverseWhite</code>, 라벨=<code>text/base/primary</code>(비활성{" "}
-        <code>status/text/disabled</code>). 모두 토큰 바인딩, 하드코딩 금지.
-      </>
-    ),
-  },
-];
-
-function H2({ children }: { children: ReactNode }) {
-  return (
-    <h2 className="mt-12 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
-      {children}
-    </h2>
-  );
-}
-
-function H3({ children }: { children: ReactNode }) {
-  return <h3 className="mt-8 scroll-m-20 text-base font-semibold tracking-tight">{children}</h3>;
-}
-
-function OriginBadge({ origin }: { origin: Origin }) {
-  const map = {
-    figma: { label: "Figma", cls: "text-text-brand-primary-high" },
-    code: { label: "Code", cls: "text-text-base-tertiary" },
-    both: { label: "Both", cls: "text-text-base-primary" },
-  } as const;
-  const { label, cls } = map[origin];
-  return (
-    <span
-      className={`inline-flex items-center rounded-full border border-current px-2 py-0.5 text-[10px] font-medium ${cls}`}
-    >
-      {label}
-    </span>
-  );
-}
 
 export default function CheckboxPage() {
   return (
     <article className="max-w-3xl">
-      <header>
-        <p className="text-sm font-medium text-text-brand-primary-high">Components</p>
-        <h1 className="mt-2 scroll-m-20 text-3xl font-semibold tracking-tight">Checkbox</h1>
-        <p className="mt-3 text-base text-text-base-tertiary">
-          하나 이상 선택할 수 있는 선택 컨트롤. Figma <code>[Checkbox]</code> 세트에 대응하며,{" "}
-          <code>size</code>(medium·small) × <code>fontWeight</code>(strong·base) 스타일 축과 네이티브{" "}
-          <code>checked</code>/<code>disabled</code> 상태를 가집니다. 라벨을 감싸는 접근성 있는
-          네이티브 input으로 구현됩니다.
-        </p>
-      </header>
+      <DocHeader title="Checkbox" slug="checkbox">
+        켜고 끌 수 있는 선택 컨트롤. role <code>checkbox</code>, 선택 여부는 <code>checked</code>로 노출됩니다.
+      </DocHeader>
 
-      <div className="mt-6">
-        <CheckboxPlayground />
+      {/* Hero preview — static */}
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-6 rounded-large border bg-container-base-low p-10">
+        <Checkbox defaultChecked>레이블</Checkbox>
+        <Checkbox size="small" defaultChecked>레이블</Checkbox>
+        <Checkbox fontWeight="base" defaultChecked>레이블</Checkbox>
       </div>
-      <p className="mt-3 text-sm text-text-base-tertiary">
-        컨트롤은 Figma 컴포넌트 속성(<code>size</code> · <code>fontWeight</code> ·{" "}
-        <code>isChecked</code> · <code>isDisabled</code>)과 동일합니다 — 값을 바꾸면 Preview가
-        갱신되고, Code 탭에 실제 소스가 표시됩니다.
-      </p>
 
-      <H2>Installation</H2>
-      <H3>CLI</H3>
-      <div className="mt-3">
-        <CodeBlock lang="bash" code={"npx @uds/cli add checkbox"} />
-      </div>
-      <H3>Manual · MCP (AI 툴)</H3>
-      <div className="mt-3">
-        <CodeBlock
-          lang="json"
-          code={'{\n  "mcpServers": {\n    "uds": { "command": "npx", "args": ["-y", "@uds/mcp"] }\n  }\n}'}
-        />
-      </div>
+      <Installation name="checkbox" />
 
       <H2>Usage</H2>
       <div className="mt-4">
         <CodeBlock lang="tsx" code={'import { Checkbox } from "@uds/ui"'} />
       </div>
       <div className="mt-3">
-        <CodeBlock
-          lang="tsx"
-          code={'<Checkbox defaultChecked>약관에 동의합니다</Checkbox>'}
-        />
+        <CodeBlock lang="tsx" code={"<Checkbox defaultChecked>약관에 동의합니다</Checkbox>"} />
       </div>
+
+      <H2>Examples</H2>
+      <H3>기본 (미선택)</H3>
+      <Example preview={<Checkbox>레이블</Checkbox>} code={"<Checkbox>레이블</Checkbox>"} />
+      <H3>선택 (checked)</H3>
+      <Example
+        preview={<Checkbox defaultChecked>레이블</Checkbox>}
+        code={"<Checkbox defaultChecked>레이블</Checkbox>"}
+      />
+      <H3>Small</H3>
+      <Example
+        preview={
+          <Checkbox size="small" defaultChecked>
+            레이블
+          </Checkbox>
+        }
+        code={'<Checkbox size="small" defaultChecked>\n  레이블\n</Checkbox>'}
+      />
+      <H3>Disabled</H3>
+      <Example
+        preview={
+          <Checkbox disabled defaultChecked>
+            레이블
+          </Checkbox>
+        }
+        code={"<Checkbox disabled defaultChecked>\n  레이블\n</Checkbox>"}
+      />
+
+      <H2>Features</H2>
+      <ul className="mt-4 list-disc space-y-1.5 pl-5 text-sm text-text-base-tertiary">
+        <li>하나 이상 선택할 수 있는 항목이면 Radio가 아니라 <code>Checkbox</code>를 사용합니다 — 약관 동의, 다중 필터 등.</li>
+        <li>
+          <code>size</code>(medium · small) × <code>fontWeight</code>(strong · base)는 독립적인 축으로,
+          박스·라벨 스케일과 굵기를 각각 조절합니다.
+        </li>
+        <li>모든 색·간격·타이포가 디자인 토큰에 바인딩되어, 토큰이 바뀌면 자동 반영됩니다.</li>
+        <li>라벨 텍스트는 <code>children</code>으로 전달합니다.</li>
+        <li>선택·비활성 상태는 프롭이 아니라 네이티브 <code>checked</code>·<code>defaultChecked</code>·<code>disabled</code>로 처리합니다.</li>
+        <li><code>onChange</code>·<code>name</code>·<code>value</code> 등 표준 input 속성을 그대로 받습니다.</li>
+      </ul>
 
       <H2>API Reference</H2>
-      <p className="mt-1 text-sm text-text-base-tertiary">
-        <code>Checkbox</code>의 모든 prop입니다. Figma 전용/코드 전용/공통을 <em>Origin</em> 배지로
-        구분합니다. 정의되지 않은 값(예 <code>{`size="large"`}</code>)은 컴파일 에러입니다.
+      <PropsTable rows={PROPS} />
+      <p className="mt-2 text-xs text-text-base-tertiary">
+        선택·비활성 상태는 프롭이 아니라 네이티브 <code>checked</code>/<code>defaultChecked</code>/
+        <code>disabled</code>로 지정합니다. <code>size</code>·<code>fontWeight</code>는 서로 독립적인
+        optional 프롭이며, Figma에 정의된 값만 타입으로 허용됩니다 — 정의되지 않은 값(예:{" "}
+        <code>{`<Checkbox size="large" />`}</code>)은 컴파일 에러입니다.
       </p>
-      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-xs text-text-base-tertiary">
-        <span className="inline-flex items-center gap-2">
-          <OriginBadge origin="figma" /> Figma 전용
-        </span>
-        <span className="inline-flex items-center gap-2">
-          <OriginBadge origin="code" /> 코드 전용
-        </span>
-        <span className="inline-flex items-center gap-2">
-          <OriginBadge origin="both" /> 공통 (Figma·코드)
-        </span>
-      </div>
-      <div className="mt-4 overflow-hidden rounded-large border">
-        <table className="w-full text-sm">
-          <thead className="bg-container-base-high/40 text-left">
-            <tr>
-              <th className="p-3 font-medium">Prop</th>
-              <th className="p-3 font-medium">Type</th>
-              <th className="p-3 font-medium">Default</th>
-              <th className="p-3 font-medium">Origin</th>
-              <th className="p-3 font-medium">설명</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {PROPS.map((p) => (
-              <tr key={p.prop} className="align-top">
-                <td className="p-3 font-mono text-xs">{p.prop}</td>
-                <td className="p-3 font-mono text-xs text-text-base-tertiary">{p.type}</td>
-                <td className="p-3 font-mono text-xs">{p.def}</td>
-                <td className="p-3">
-                  <OriginBadge origin={p.origin} />
-                </td>
-                <td className="p-3 text-xs text-text-base-tertiary">{p.desc}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
 
-      <H2>Design Tokens</H2>
-      <div className="mt-4 overflow-hidden rounded-large border">
-        <table className="w-full text-sm">
-          <thead className="bg-container-base-high/40 text-left">
-            <tr>
-              <th className="p-3 font-medium">용도</th>
-              <th className="p-3 font-medium">토큰</th>
-              <th className="p-3 font-medium">값</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {TOKENS.map(([use, token, value]) => (
-              <tr key={use}>
-                <td className="p-3 text-xs">{use}</td>
-                <td className="p-3 font-mono text-xs text-text-base-tertiary">{token}</td>
-                <td className="p-3 font-mono text-xs">{value}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <H2>Accessibility</H2>
+      <ul className="mt-4 list-disc space-y-1.5 pl-5 text-sm text-text-base-tertiary">
+        <li><code>{"<label>"}</code>이 네이티브 <code>{'<input type="checkbox">'}</code>를 감싸, 라벨 클릭·폼 시맨틱을 기본 지원합니다.</li>
+        <li>네이티브 input으로 렌더되어 키보드 포커스·스페이스 토글·스크린리더를 기본 지원합니다.</li>
+        <li><code>focus-visible</code> 링으로 키보드 포커스만 표시합니다(마우스 클릭 시엔 뜨지 않음).</li>
+        <li>비활성은 네이티브 <code>disabled</code>로 지정해 상호작용을 막고 보조기술에 상태를 전달합니다.</li>
+      </ul>
 
-      <H2>AI 가이드</H2>
-      <p className="mt-1 text-sm text-text-base-tertiary">
-        AI 툴이 이 컴포넌트를 올바르게 쓰도록 돕는 규칙입니다. 레지스트리 <code>meta.ai</code>에 같은{" "}
-        <code>[분류]</code> 접두사로 배포됩니다.
-      </p>
-      <div className="mt-4 overflow-hidden rounded-large border">
-        <table className="w-full text-sm">
-          <thead className="bg-container-base-high/40 text-left">
-            <tr>
-              <th className="w-28 p-3 font-medium">분류</th>
-              <th className="p-3 font-medium">가이드</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {AI_GUIDE.map((g, i) => (
-              <tr key={i} className="align-top">
-                <td className="whitespace-nowrap p-3 text-xs font-medium">{g.category}</td>
-                <td className="p-3 text-xs text-text-base-tertiary">{g.rule}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </article>
   );
 }

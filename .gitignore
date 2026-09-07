@@ -7,7 +7,14 @@ out/
 .env
 .env.local
 .DS_Store
-public/r/
+apps/docs/public/r/
+apps/docs/public/examples/
+apps/docs/public/components/
+apps/docs/public/llms.txt
+apps/docs/public/llms-full.txt
+apps/docs/public/ai-kit.txt
+apps/docs/public/uds-rules.md
 .playwright-mcp/
 *.png
 .claude/settings.local.json
+.vercel
