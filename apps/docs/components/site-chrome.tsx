@@ -21,6 +21,7 @@ const SIDE: { title: string; items: { href: string; label: string }[] }[] = [
       { href: "/get-started", label: "Introduction" },
       { href: "/get-started/installation", label: "Installation" },
       { href: "/get-started/quickstart", label: "Quickstart" },
+      { href: "/get-started/tutorial", label: "튜토리얼 — Claude로 화면 만들기" },
       { href: "/ai-kit", label: "AI로 화면 만들기" },
     ],
   },
